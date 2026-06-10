@@ -1,0 +1,37 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+/* Premium Light Theme Overrides */
+.fi-body {
+    @apply bg-[#faf8ff] text-[#131b2e];
+}
+
+/* Glassmorphism Cards for Light Theme */
+.fi-wi-stats-overview-stat,
+.fi-ta-record,
+.fi-fo-card,
+.fi-section {
+    @apply bg-white/80 backdrop-blur-[12px] border border-[rgba(80,200,120,0.15)] rounded-xl shadow-[0_4px_20px_rgba(80,200,120,0.05)] transition-all duration-300;
+}
+
+.fi-wi-stats-overview-stat:hover,
+.fi-ta-record:hover,
+.fi-fo-card:hover,
+.fi-section:hover {
+    @apply shadow-[0_8px_30px_rgba(80,200,120,0.1)];
+}
+
+/* Glowing Primary Buttons */
+.fi-btn-color-primary {
+    @apply transition-all duration-300 shadow-[0_4px_10px_rgba(80,200,120,0.2)];
+}
+.fi-btn-color-primary:hover {
+    @apply shadow-[0_6px_15px_rgba(80,200,120,0.4)];
+}
+
+/* Sidebar Light */
+.fi-sidebar {
+    @apply bg-white/90 backdrop-blur-md border-r border-[rgba(80,200,120,0.15)];
+}
