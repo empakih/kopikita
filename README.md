@@ -1,58 +1,167 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌱 Smartani - Precision Agriculture CMS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Selamat datang di repositori proyek **Smartani**! 
+Proyek ini adalah sebuah *Dynamic Company Profile* berbasis *Content Management System (CMS)* yang dirancang untuk mempromosikan teknologi *greenhouse* cerdas (IoT) dengan pendekatan yang elegan, interaktif, dan *"Down to Earth"*.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📑 Daftar Isi
+1. [Deskripsi Proyek](#-deskripsi-proyek)
+2. [Tech Stack](#-tech-stack)
+3. [Fitur-Fitur Utama](#-fitur-fitur-utama)
+4. [Catatan Penting dari Dosen (Requirements)](#-catatan-penting-dari-dosen-requirements)
+5. [Struktur Direktori Penting](#-struktur-direktori-penting)
+6. [Panduan Instalasi & Menjalankan Lokal](#-panduan-instalasi--menjalankan-lokal)
+7. [Workflow & Kolaborasi Tim](#-workflow--kolaborasi-tim)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🎯 Deskripsi Proyek
+Website ini dirancang bukan sekadar sebagai *landing page* statis, melainkan platform dinamis di mana **semua konten visual dan teks dikelola langsung dari *Dashboard Admin***. 
+Hal ini bertujuan untuk mempermudah pembaruan konten dan mengantisipasi ekspansi bisnis Smartani di masa depan (misal: merambah ke sektor peternakan) tanpa perlu membongkar ulang *source code*.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 Tech Stack
+Proyek ini dibangun menggunakan teknologi modern yang berfokus pada kecepatan, keamanan, dan pengalaman *developer* yang menyenangkan:
+- **Backend Framework:** Laravel 13 (PHP 8.3)
+- **CMS / Admin Panel:** Filament (v3/v5.x)
+- **Frontend Styling:** Tailwind CSS v4 + Vite
+- **Database:** SQLite (Bisa dengan mudah di-*switch* ke MySQL untuk tahap *production*)
+- **Icons & Fonts:** Material Symbols Outlined & Google Fonts (Inter)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## ✨ Fitur-Fitur Utama
 
-## Agentic Development
+### 1. Visualisasi Sensor Interaktif (Dinamis)
+Menampilkan data indikator sensor (seperti Suhu, Kelembapan, pH Air, dll.) di halaman utama. Semua nama sensor, satuan, dan ikon **tidak di-*hardcode***, melainkan dikontrol dari CMS.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 2. Katalog Produk & Layanan (Highlight Interaktif)
+Menyoroti layanan unggulan Smartani (seperti jasa pembuatan *greenhouse* atau produk pelet) dengan *layout zig-zag* yang responsif. Terdapat fitur *pop-up/modal* interaktif untuk pengalaman pengguna (UX) yang lebih menarik tanpa teks yang membosankan.
 
-```bash
-composer require laravel/boost --dev
+### 3. Manajemen Artikel (SEO-Optimized)
+Modul blog/berita untuk strategi *content marketing* (seperti Alodokter). Menggunakan **Rich Text Editor (CKEditor)** di *dashboard admin* agar teks dapat diatur tebal/miring dan disisipkan gambar. Dilengkapi dengan pengaturan *thumbnail* dan kategori.
 
-php artisan boost:install
+### 4. Formulir Contact Us Terintegrasi
+Pengunjung dapat langsung mengirimkan pesan atau permintaan konsultasi. Data tidak dikirim statis via email, melainkan masuk ke *database* dan dapat di-*review* oleh Admin melalui tabel khusus di panel Filament.
+
+### 5. CMS Admin Dashboard
+Panel kendali terpusat yang bersih (*clean UI*) yang ditujukan untuk **satu *role*** (Admin/Pemilik). Tidak ada sistem *role* berlapis karena web ini berfokus pada *company profile*, bukan *e-commerce* transaksional multi-user.
+
+---
+
+## 📋 Catatan Penting dari Dosen (Requirements)
+
+Dokumen ini memuat rangkuman kesepakatan dan target yang **wajib dipatuhi** oleh seluruh anggota tim berdasarkan *review* dosen pembimbing:
+
+1. **NO HARDCODING!** Semua data, gambar, dan teks di *front-end* wajib bersifat dinamis (mengambil dari *database*).
+2. **Efisiensi Database (Clean Code):** Dilarang menggunakan tipe data yang boros. Contoh: *Field* nama tidak boleh menggunakan `TEXT`, gunakan `VARCHAR` dengan *length* secukupnya. Desain ERD harus melalui proses normalisasi yang benar.
+3. **Layout & Animasi:**
+   - Gunakan *Grid System* yang *fluid* dan responsif.
+   - Terapkan layout *Zig-zag* untuk bagian keunggulan/fitur.
+   - Perbanyak elemen interaktif seperti *hover effects* dan *pop-up video/simulasi* ketimbang sekadar teks statis.
+4. **Visi Ekspansi Bisnis:** Arsitektur CMS harus siap menampung data baru jika Smartani nantinya berekspansi (misal ke sektor peternakan).
+5. **Aturan Penamaan untuk Tugas Akhir (TA):** Jika proyek ini berlanjut menjadi bahan TA, **jangan** menggunakan merk dagang "Smartani" secara gamblang. Gunakan istilah akademis: **"Sistem Profil Perusahaan Precision Farming Berbasis Web"** atau sejenisnya.
+6. **Agile Methodology:** Pengerjaan tidak boleh kaku. Prosesnya: *Mockup* UI/UX -> ACC Dosen -> *Coding Front-End & Back-End* -> Testing QA.
+
+---
+
+## 📂 Struktur Direktori Penting
+
+Untuk memudahkan navigasi bagi *developer*, berikut adalah folder utama yang perlu Anda ketahui:
+
+```text
+smartani-final/
+├── app/
+│   ├── Filament/Resources/  # -> Logika Dashboard CMS Admin (CRUD Sensor, Artikel, dll)
+│   ├── Http/Controllers/    # -> Logika Back-end Front-office (Mengirim data ke Blade)
+│   └── Models/              # -> Definisi Database (Eloquent ORM)
+├── database/
+│   ├── migrations/          # -> Skema/Struktur Tabel Database (Jangan diedit manual di DB!)
+│   └── database.sqlite      # -> File Database lokal Anda
+├── resources/
+│   ├── css/ & js/           # -> Asset Tailwind CSS V4 dan Scripts pendukung
+│   └── views/               # -> File tampilan antarmuka (Blade HTML)
+│       ├── components/      # -> Reusable UI (Navbar, Footer, Layout utama)
+│       └── *.blade.php      # -> Halaman spesifik (home, katalog, artikel, dll)
+└── routes/
+    └── web.php              # -> Definisi semua rute URL website
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🛠️ Panduan Instalasi & Menjalankan Lokal
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di laptop masing-masing anggota tim:
 
-## Code of Conduct
+### Prasyarat
+- **PHP** >= 8.3
+- **Composer** (Package Manager PHP)
+- **Node.js & NPM** (Package Manager JS/CSS)
+- *Git*
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Langkah-langkah
 
-## Security Vulnerabilities
+1. **Clone Repositori**
+   ```bash
+   git clone <link-repo-github-private-kalian>
+   cd smartani-final
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. **Install Dependensi PHP & Node.js**
+   ```bash
+   composer install
+   npm install
+   ```
 
-## License
+3. **Pengaturan *Environment***
+   *Copy* file `.env.example` menjadi `.env`.
+   ```bash
+   cp .env.example .env
+   ```
+   Lalu *generate application key* Laravel:
+   ```bash
+   php artisan key:generate
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+4. **Siapkan Database**
+   Pastikan Anda menggunakan koneksi *database* yang diinginkan (default-nya adalah SQLite). Jalankan migrasi untuk membuat tabel:
+   ```bash
+   php artisan migrate
+   ```
+
+5. **Symlink Storage (Untuk Gambar/Media)**
+   Agar gambar yang diupload via CMS bisa diakses oleh *front-end*:
+   ```bash
+   php artisan storage:link
+   ```
+
+6. **Jalankan Aplikasi**
+   Anda membutuhkan **dua terminal/CMD** yang berjalan bersamaan:
+   
+   **Terminal 1 (Menjalankan server Laravel):**
+   ```bash
+   php artisan serve
+   ```
+   
+   **Terminal 2 (Menjalankan Vite Asset bundler untuk Tailwind):**
+   ```bash
+   npm run dev
+   ```
+
+7. **Selesai! 🎉**
+   - Website Utama bisa diakses di: `http://localhost:8000`
+   - Dashboard CMS bisa diakses di: `http://localhost:8000/admin`
+
+---
+
+## 🤝 Workflow & Kolaborasi Tim
+
+1. **Gunakan Branching:** Jangan langsung `push` ke `main`. Buat branch baru untuk setiap fitur (contoh: `git checkout -b fitur-artikel`).
+2. **Commit yang Jelas:** Gunakan pesan commit yang deskriptif. (contoh: `git commit -m "feat: menambah halaman detail artikel"`).
+3. **Pull Sebelum Push:** Selalu jalankan `git pull origin main` sebelum melakukan push untuk menghindari bentrok (*conflict*).
+4. **Build Asset Sebelum Rilis:** Jika ada anggota yang bertugas di bagian rilis/production, pastikan selalu menjalankan `npm run build` sebelum *deployment* agar CSS dan JS ter-*compile* ukurannya.
+
+---
+*Dibuat dengan ❤️ untuk kemajuan Pertanian Presisi di Indonesia.*
