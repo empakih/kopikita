@@ -22,12 +22,16 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install PHP Dependencies (untuk Filament CSS)
+        run: composer install --prefer-dist --no-progress
+
       - name: Install JS Dependencies and Build
         run: |
           npm install
           npm run build
           # Kita hapus folder yang tidak perlu diupload agar proses transfer super cepat
           rm -rf node_modules
+          rm -rf vendor
           rm -rf .git
 
       - name: Upload Files to Server via SCP
