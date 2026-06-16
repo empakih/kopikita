@@ -63,17 +63,20 @@ jobs:
 
       - name: Execute Setup Commands via SSH
         uses: appleboy/ssh-action@master
+        env:
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
+          envs: DB_DATABASE,DB_USERNAME,DB_PASSWORD
           script: |
             cd web/kelas-b-5.informatika-unjedir.web.id/public_html
 
-            # Pilih PHP 8.4 bila tersedia (project butuh PHP >= 8.4)
             PHP_BIN=$(command -v php8.4 || command -v php)
             echo ">> Memakai PHP: $PHP_BIN"; $PHP_BIN -v | head -1
-            echo ">> PHP yang terinstall di server:"; ls /usr/bin/php* 2>/dev/null || true
 
             # Pastikan .env ada
             if [ ! -f .env ]; then cp .env.example .env; fi
@@ -87,8 +90,30 @@ jobs:
               $PHP_BIN artisan key:generate --force
             fi
 
-            # vendor/ sudah diupload dari CI -> TIDAK perlu composer install di server.
+            # --- Konfigurasi DATABASE MySQL (server tidak punya driver sqlite) ---
+            # Nilai diambil dari GitHub Secrets. Hapus baris DB_ lama, tulis ulang.
+            sed -i -E '/^#?[[:space:]]*DB_(CONNECTION|HOST|PORT|DATABASE|USERNAME|PASSWORD)=/d' .env
+            {
+              echo "DB_CONNECTION=mysql"
+              echo "DB_HOST=127.0.0.1"
+              echo "DB_PORT=3306"
+              echo "DB_DATABASE=${DB_DATABASE}"
+              echo "DB_USERNAME=${DB_USERNAME}"
+              echo "DB_PASSWORD=\"${DB_PASSWORD}\""
+            } >> .env
+
+            # vendor/ sudah diupload dari CI -> tidak perlu composer install di server.
             $PHP_BIN artisan migrate --force
+
+            # Seed SEKALI saja bila tabel produk masih kosong (sekaligus buat akun admin)
+            PCOUNT=$($PHP_BIN artisan tinker --execute="echo \App\Models\Product::count();" 2>/dev/null | tr -dc '0-9')
+            if [ -z "$PCOUNT" ] || [ "$PCOUNT" = "0" ]; then
+              echo ">> Database kosong -> menjalankan seeder data demo + admin"
+              $PHP_BIN artisan db:seed --force
+            else
+              echo ">> Data sudah ada ($PCOUNT produk), lewati seeding"
+            fi
+
             $PHP_BIN artisan storage:link
             $PHP_BIN artisan optimize:clear
 
