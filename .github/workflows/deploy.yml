@@ -29,10 +29,33 @@ jobs:
         run: |
           npm install
           npm run build
-          # Kita hapus folder yang tidak perlu diupload agar proses transfer super cepat
+          # Hapus folder yang tidak perlu diupload agar transfer cepat
           rm -rf node_modules
           rm -rf vendor
           rm -rf .git
+
+      # nginx di server sudah dikonfigurasi: root = public_html/public.
+      # Maka public_html HARUS berupa folder project Laravel (punya subfolder public/),
+      # BUKAN symlink. Langkah ini membatalkan symlink lama (jika ada) & memulihkan
+      # struktur folder nyata, sambil menjaga .env tetap ada.
+      - name: Prepare Directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd web/kelas-b-5.informatika-unjedir.web.id
+            if [ -L public_html ]; then
+              echo ">> Membatalkan symlink public_html, memulihkan folder project"
+              rm -f public_html
+              if [ -d app ]; then
+                mv app public_html   # 'app' berisi project + .env yang sudah diselamatkan
+              else
+                mkdir -p public_html
+              fi
+            fi
+            mkdir -p public_html
 
       - name: Upload Files to Server via SCP
         uses: appleboy/scp-action@master
@@ -41,9 +64,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "."
-          # Upload project ke folder 'app' (BUKAN public_html), karena document root
-          # nginx harus menunjuk ke public/ Laravel, bukan root project.
-          target: "web/kelas-b-5.informatika-unjedir.web.id/app"
+          target: "web/kelas-b-5.informatika-unjedir.web.id/public_html"
 
       - name: Execute Setup Commands via SSH
         uses: appleboy/ssh-action@master
@@ -52,22 +73,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd web/kelas-b-5.informatika-unjedir.web.id
-
-            # --- Perbaikan document root: arahkan public_html -> app/public ---
-            # Idempoten: hanya dijalankan jika public_html belum berupa symlink.
-            if [ ! -L public_html ]; then
-              echo ">> Restrukturisasi: public_html akan diarahkan ke app/public"
-              # Selamatkan file kritis dari struktur lama agar tidak hilang
-              if [ -f public_html/.env ]; then cp public_html/.env app/.env; fi
-              if [ -f public_html/database/database.sqlite ]; then
-                cp public_html/database/database.sqlite app/database/database.sqlite
-              fi
-              rm -rf public_html
-              ln -s app/public public_html
-            fi
-
-            cd app
+            cd web/kelas-b-5.informatika-unjedir.web.id/public_html
 
             # Install PHP Dependencies (Composer)
             composer install --optimize-autoloader --no-dev
@@ -85,23 +91,3 @@ jobs:
 
             # Set Permission agar tidak Permission Denied
             chmod -R 775 storage bootstrap/cache database
-
-      - name: Diagnose Server Config
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script: |
-            D=web/kelas-b-5.informatika-unjedir.web.id
-            echo "===== STRUKTUR DIREKTORI ====="
-            ls -la $D/
-            echo "===== TARGET SYMLINK public_html ====="
-            readlink -f $D/public_html
-            echo "===== NGINX CONF (root & try_files) ====="
-            cat conf/web/kelas-b-5.informatika-unjedir.web.id/nginx.conf 2>/dev/null | grep -E "root|try_files|fastcgi_param SCRIPT|index " || echo "tidak ada/akses ditolak"
-            echo "===== PHP-FPM POOL (open_basedir & user) ====="
-            grep -rE "open_basedir|^user|^group|listen " conf/web/kelas-b-5.informatika-unjedir.web.id/ 2>/dev/null || echo "tidak ditemukan"
-            cat /etc/php*/fpm/pool.d/kelas-b-5*.conf 2>/dev/null | grep -E "open_basedir|^user|^group" || echo "(pool global tidak terbaca)"
-            echo "===== 50 BARIS TERAKHIR LARAVEL LOG ====="
-            tail -n 50 $D/app/storage/logs/laravel.log 2>/dev/null || echo "log kosong/tidak ada"
