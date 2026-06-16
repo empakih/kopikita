@@ -81,8 +81,10 @@ jobs:
             # Pastikan .env ada
             if [ ! -f .env ]; then cp .env.example .env; fi
 
-            # Set APP_URL ke domain produksi
+            # Mode produksi: domain + matikan debug (keamanan)
             sed -i 's|^APP_URL=.*|APP_URL=https://kelas-b-5.informatika-unjedir.web.id|' .env
+            sed -i 's|^APP_ENV=.*|APP_ENV=production|' .env
+            sed -i 's|^APP_DEBUG=.*|APP_DEBUG=false|' .env
 
             # Generate APP_KEY jika masih kosong/invalid
             if ! grep -q "^APP_KEY=base64" .env; then
@@ -118,21 +120,3 @@ jobs:
             $PHP_BIN artisan optimize:clear
 
             chmod -R 775 storage bootstrap/cache database
-
-      - name: Diagnose
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script: |
-            cd web/kelas-b-5.informatika-unjedir.web.id
-            echo "===== VERSI PHP FPM DOMAIN (dari fastcgi_pass) ====="
-            grep -rhE "fastcgi_pass|php[0-9]+\.[0-9]+" conf/web/kelas-b-5.informatika-unjedir.web.id/ 2>/dev/null | sort -u || echo "tidak terbaca"
-            cd public_html
-            echo "===== vendor/autoload.php ADA? ====="
-            [ -f vendor/autoload.php ] && echo "ADA" || echo "TIDAK ADA"
-            echo "===== APP_KEY ====="
-            grep -q "^APP_KEY=base64" .env && echo "APP_KEY: ADA" || echo "APP_KEY: KOSONG"
-            echo "===== 40 BARIS LARAVEL LOG ====="
-            tail -n 40 storage/logs/laravel.log 2>/dev/null || echo "log kosong"
