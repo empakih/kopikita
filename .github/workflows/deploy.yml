@@ -91,3 +91,29 @@ jobs:
 
             # Set Permission agar tidak Permission Denied
             chmod -R 775 storage bootstrap/cache database
+
+      - name: Diagnose 500
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd web/kelas-b-5.informatika-unjedir.web.id
+            echo "===== DOMAIN DIR ====="
+            ls -la
+            echo "===== readlink public_html ====="
+            readlink -f public_html
+            cd public_html
+            echo "===== ISI public_html (30) ====="
+            ls -la | head -30
+            echo "===== .env penting ====="
+            grep -E "^APP_ENV|^APP_DEBUG|^APP_URL|^DB_CONNECTION|^DB_DATABASE|^SESSION_DRIVER" .env 2>/dev/null
+            grep -q "^APP_KEY=base64" .env && echo "APP_KEY: ADA" || echo "APP_KEY: KOSONG/INVALID"
+            echo "===== Aktifkan APP_DEBUG sementara ====="
+            sed -i 's/^APP_DEBUG=.*/APP_DEBUG=true/' .env
+            php artisan optimize:clear
+            echo "===== PERM storage & cache ====="
+            ls -ld storage storage/logs storage/framework storage/framework/views bootstrap/cache 2>/dev/null
+            echo "===== 60 BARIS LARAVEL LOG ====="
+            tail -n 60 storage/logs/laravel.log 2>/dev/null || echo "log kosong/tidak ada"
