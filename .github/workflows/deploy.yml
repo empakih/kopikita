@@ -41,8 +41,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "."
-          target: "web/kelas-b-5.informatika-unjedir.web.id/public_html"
-          
+          # Upload project ke folder 'app' (BUKAN public_html), karena document root
+          # nginx harus menunjuk ke public/ Laravel, bukan root project.
+          target: "web/kelas-b-5.informatika-unjedir.web.id/app"
+
       - name: Execute Setup Commands via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -50,21 +52,36 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd web/kelas-b-5.informatika-unjedir.web.id/public_html
-            
+            cd web/kelas-b-5.informatika-unjedir.web.id
+
+            # --- Perbaikan document root: arahkan public_html -> app/public ---
+            # Idempoten: hanya dijalankan jika public_html belum berupa symlink.
+            if [ ! -L public_html ]; then
+              echo ">> Restrukturisasi: public_html akan diarahkan ke app/public"
+              # Selamatkan file kritis dari struktur lama agar tidak hilang
+              if [ -f public_html/.env ]; then cp public_html/.env app/.env; fi
+              if [ -f public_html/database/database.sqlite ]; then
+                cp public_html/database/database.sqlite app/database/database.sqlite
+              fi
+              rm -rf public_html
+              ln -s app/public public_html
+            fi
+
+            cd app
+
             # Install PHP Dependencies (Composer)
             composer install --optimize-autoloader --no-dev
-            
+
             # Pastikan .env ada
             if [ ! -f .env ]; then
               cp .env.example .env
               php artisan key:generate
             fi
-            
+
             # Jalankan Migrasi & Link Storage & Clear Cache
             php artisan migrate --force
             php artisan storage:link
             php artisan optimize:clear
-            
+
             # Set Permission agar tidak Permission Denied
             chmod -R 775 storage bootstrap/cache database

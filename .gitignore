@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Internal testing docs (contain admin credentials) — do NOT commit
+/document-project/PRD-Smartani-TestSprite.md
+/document-project/PRD-Smartani-TestSprite.pdf
