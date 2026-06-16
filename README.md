@@ -126,10 +126,16 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di laptop masing
    ```
 
 4. **Siapkan Database**
-   Pastikan Anda menggunakan koneksi *database* yang diinginkan (default-nya adalah SQLite). Jalankan migrasi untuk membuat tabel:
+   Default-nya SQLite. Buat dulu file database kosongnya, lalu jalankan migrasi **beserta seeder** (mengisi data demo + membuat akun admin):
    ```bash
-   php artisan migrate
+   # Buat file SQLite kosong:
+   #   Linux/Mac : touch database/database.sqlite
+   #   Windows   : New-Item database/database.sqlite -ItemType File
+
+   php artisan migrate --seed
    ```
+   > ⚠️ Jika muncul error `could not find driver` (PHP tanpa driver SQLite), pakai MySQL:
+   > set `DB_CONNECTION=mysql` + kredensial DB Anda di `.env`, lalu `php artisan migrate --seed`.
 
 5. **Symlink Storage (Untuk Gambar/Media)**
    Agar gambar yang diupload via CMS bisa diakses oleh *front-end*:
@@ -153,6 +159,9 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di laptop masing
 7. **Selesai! 🎉**
    - Website Utama bisa diakses di: `http://localhost:8000`
    - Dashboard CMS bisa diakses di: `http://localhost:8000/admin`
+   - **Login Admin (otomatis dibuat oleh seeder):**
+     - Email: `admin@smartani.id`
+     - Password: `password123`
 
 ---
 
@@ -162,6 +171,17 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di laptop masing
 2. **Commit yang Jelas:** Gunakan pesan commit yang deskriptif. (contoh: `git commit -m "feat: menambah halaman detail artikel"`).
 3. **Pull Sebelum Push:** Selalu jalankan `git pull origin main` sebelum melakukan push untuk menghindari bentrok (*conflict*).
 4. **Build Asset Sebelum Rilis:** Jika ada anggota yang bertugas di bagian rilis/production, pastikan selalu menjalankan `npm run build` sebelum *deployment* agar CSS dan JS ter-*compile* ukurannya.
+
+---
+
+## 🚀 Deployment (Produksi)
+
+> ⚠️ **PENTING:** Setiap `push` ke branch **`main`** akan **otomatis men-deploy ke server produksi** (GitHub Actions → HestiaCP). Jadi jangan push langsung ke `main` kecuali memang siap rilis — pakai branch + Pull Request.
+
+- **URL Produksi:** https://kelas-b-5.informatika-unjedir.web.id
+- **Server:** HestiaCP (PHP 8.3, MySQL), deploy via `.github/workflows/deploy.yml`
+- Kredensial server & database disimpan di **GitHub Secrets** (tidak ada di repo).
+- Build `vendor/` dilakukan di CI (PHP 8.3) lalu di-upload — server tidak menjalankan `composer install`.
 
 ---
 *Dibuat dengan ❤️ untuk kemajuan Pertanian Presisi di Indonesia.*
