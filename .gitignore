@@ -26,6 +26,7 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 
-# Dokumen internal/akademik (PRD, SRS, SDD, laporan UAT/TestSprite) — tidak perlu
-# masuk repo aplikasi maupun ter-deploy ke server produksi.
-/document-project/
+# PRD internal berisi kredensial admin & ditandai "jangan untuk dosen" — JANGAN commit.
+# Dokumen lain di document-project/ sengaja dibagikan ke tim (di-link dari README).
+/document-project/PRD-Smartani-TestSprite.md
+/document-project/PRD-Smartani-TestSprite.pdf

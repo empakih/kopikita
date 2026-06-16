@@ -10,9 +10,10 @@ Proyek ini adalah sebuah *Dynamic Company Profile* berbasis *Content Management 
 2. [Tech Stack](#-tech-stack)
 3. [Fitur-Fitur Utama](#-fitur-fitur-utama)
 4. [Catatan Penting dari Dosen (Requirements)](#-catatan-penting-dari-dosen-requirements)
-5. [Struktur Direktori Penting](#-struktur-direktori-penting)
-6. [Panduan Instalasi & Menjalankan Lokal](#-panduan-instalasi--menjalankan-lokal)
-7. [Workflow & Kolaborasi Tim](#-workflow--kolaborasi-tim)
+5. [Dokumentasi Proyek](#-dokumentasi-proyek)
+6. [Struktur Direktori Penting](#-struktur-direktori-penting)
+7. [Panduan Instalasi & Menjalankan Lokal](#-panduan-instalasi--menjalankan-lokal)
+8. [Workflow & Kolaborasi Tim](#-workflow--kolaborasi-tim)
 
 ---
 
@@ -64,6 +65,24 @@ Dokumen ini memuat rangkuman kesepakatan dan target yang **wajib dipatuhi** oleh
 4. **Visi Ekspansi Bisnis:** Arsitektur CMS harus siap menampung data baru jika Smartani nantinya berekspansi (misal ke sektor peternakan).
 5. **Aturan Penamaan untuk Tugas Akhir (TA):** Jika proyek ini berlanjut menjadi bahan TA, **jangan** menggunakan merk dagang "Smartani" secara gamblang. Gunakan istilah akademis: **"Sistem Profil Perusahaan Precision Farming Berbasis Web"** atau sejenisnya.
 6. **Agile Methodology:** Pengerjaan tidak boleh kaku. Prosesnya: *Mockup* UI/UX -> ACC Dosen -> *Coding Front-End & Back-End* -> Testing QA.
+
+---
+
+## 📄 Dokumentasi Proyek
+
+Dokumen pendukung proyek tersedia di folder [`document-project/`](document-project/).
+Klik link berikut untuk melihat langsung di GitHub (PDF ditampilkan otomatis oleh viewer GitHub):
+
+| Dokumen | Keterangan |
+|---------|------------|
+| 📘 [SRS (PDF)](document-project/SRS.pdf) | *Software Requirements Specification* — kebutuhan sistem |
+| 📐 [SDD (PDF)](document-project/SDD.pdf) | *Software Design Document* — desain sistem |
+| 🧪 [Skenario UAT (PDF)](document-project/UAT-Skenario-Pengujian.pdf) | 30 skenario *User Acceptance Testing* (versi untuk dosen) |
+| 📊 [Laporan TestSprite (PDF)](document-project/TestSprite-Report.pdf) | Hasil pengujian otomatis *end-to-end* (internal tim) |
+| 📝 [Catatan Dosen](document-project/catatan-dosen.md) | Rangkuman *requirement* & arahan dari dosen pembimbing |
+
+> Catatan: PRD (untuk tool testing) bersifat **internal & berisi kredensial admin**,
+> jadi sengaja **tidak** dimasukkan ke repo. Minta langsung ke pemilik repo bila diperlukan.
 
 ---
 
