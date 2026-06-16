@@ -20,6 +20,7 @@ class ArticleForm
                     ->columnSpanFull(),
                 \Filament\Forms\Components\FileUpload::make('thumbnail')
                     ->image()
+                    ->disk('public')
                     ->directory('articles'),
                 TextInput::make('category'),
                 TextInput::make('author'),

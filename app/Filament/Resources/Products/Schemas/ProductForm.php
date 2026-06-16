@@ -25,7 +25,9 @@ class ProductForm
                 \Filament\Forms\Components\RichEditor::make('content')
                     ->columnSpanFull(),
                 FileUpload::make('image')
-                    ->image(),
+                    ->image()
+                    ->disk('public')
+                    ->directory('products'),
                 TextInput::make('category'),
                 Toggle::make('is_bestseller')
                     ->required(),

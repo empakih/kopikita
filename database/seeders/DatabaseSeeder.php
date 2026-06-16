@@ -89,6 +89,9 @@ class DatabaseSeeder extends Seeder
         // Seed FAQs
         $this->call(FaqSeeder::class);
 
+        // Seed Hero Slider
+        $this->call(HeroSlideSeeder::class);
+
         // Create Admin User
         \App\Models\User::firstOrCreate(
             ['email' => 'admin@smartani.id'],

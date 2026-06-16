@@ -7,12 +7,14 @@ use App\Models\Sensor;
 use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Article;
+use App\Models\HeroSlide;
 use App\Models\ContactMessage;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        $heroSlides = HeroSlide::where('is_active', true)->orderBy('order_index')->get();
         $sensors = Sensor::where('is_active', true)->get();
         $features = Feature::where('is_active', true)->orderBy('order_index')->get();
         $products = Product::latest()->take(3)->get();
@@ -22,7 +24,7 @@ class HomeController extends Controller
                                 ->take(5)
                                 ->get();
 
-        return view('home', compact('sensors', 'features', 'products', 'articles', 'faqs'));
+        return view('home', compact('heroSlides', 'sensors', 'features', 'products', 'articles', 'faqs'));
     }
 
     public function submitContact(Request $request)

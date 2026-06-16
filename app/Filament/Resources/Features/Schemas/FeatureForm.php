@@ -19,7 +19,9 @@ class FeatureForm
                 Textarea::make('description')
                     ->columnSpanFull(),
                 FileUpload::make('image_path')
-                    ->image(),
+                    ->image()
+                    ->disk('public')
+                    ->directory('features'),
                 \Filament\Forms\Components\Hidden::make('order_index')
                     ->default(fn () => (\App\Models\Feature::max('order_index') ?? 0) + 1),
                 Toggle::make('is_active')

@@ -4,19 +4,24 @@
     @endpush
 
     <main class="pt-[80px]"> <!-- Offset for fixed nav -->
-<!-- 2. Hero Section (Swiper Slider) -->
+<!-- 2. Hero Section (Swiper Slider) - Dikelola dari Admin (Hero Slider) -->
 <section class="w-full h-[600px] relative">
 <div class="swiper heroSwiper w-full h-full">
 <div class="swiper-wrapper">
-<div class="swiper-slide w-full h-full">
-<img alt="Large plantation with green seedlings of fresh lettuce growing in hothouse" class="w-full h-full object-cover" src="https://plus.unsplash.com/premium_photo-1661963367713-b85abde75a23?auto=format&fit=crop&w=1600&q=80"/>
-</div>
-<div class="swiper-slide w-full h-full">
-<img alt="A happy farmer family working in hydroponic greenhouse farm" class="w-full h-full object-cover" src="https://plus.unsplash.com/premium_photo-1667509304967-317a5dd29660?auto=format&fit=crop&w=1600&q=80"/>
-</div>
-<div class="swiper-slide w-full h-full">
-<img alt="A greenhouse filled with lots of green plants" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1727099079513-952d40de9d78?auto=format&fit=crop&w=1600&q=80"/>
-</div>
+    @forelse($heroSlides as $slide)
+    @php
+        $heroSrc = \Illuminate\Support\Str::startsWith($slide->image, ['http://', 'https://'])
+            ? $slide->image
+            : asset('storage/' . $slide->image);
+    @endphp
+    <div class="swiper-slide w-full h-full">
+        <img alt="{{ $slide->title ?? 'Smartani Greenhouse' }}" class="w-full h-full object-cover" src="{{ $heroSrc }}"/>
+    </div>
+    @empty
+    <div class="swiper-slide w-full h-full">
+        <img alt="Smartani Greenhouse" class="w-full h-full object-cover" src="https://plus.unsplash.com/premium_photo-1661963367713-b85abde75a23?auto=format&fit=crop&w=1600&q=80"/>
+    </div>
+    @endforelse
 </div>
 <div class="swiper-pagination"></div>
 </div>
