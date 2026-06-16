@@ -15,7 +15,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.3'
+          extensions: intl, mbstring, bcmath, gd, zip, pdo_sqlite, sqlite3
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
