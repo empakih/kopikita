@@ -38,22 +38,22 @@
 <nav id="main-nav" class="bg-white/80 dark:bg-surface-container/80 backdrop-blur-md border-b border-glass-border shadow-sm transition-all duration-300 ease-in-out fixed top-0 w-full z-50">
     <div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
         <!-- Logo -->
-        <a href="{{ route('home') }}" class="font-headline-md text-headline-md font-bold text-primary flex items-center gap-2">
+        <a id="nav-logo" data-testid="nav-logo" href="{{ route('home') }}" class="font-headline-md text-headline-md font-bold text-primary flex items-center gap-2">
             <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
             Smartani
         </a>
 
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-8">
-            <a class="font-label-lg text-label-lg {{ request()->routeIs('home') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('home') }}">Home</a>
-            <a class="font-label-lg text-label-lg {{ request()->routeIs('katalog') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('katalog') }}">Products</a>
-            <a class="font-label-lg text-label-lg {{ request()->routeIs('artikel*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('artikel') }}">Articles</a>
-            <a class="font-label-lg text-label-lg {{ request()->routeIs('faq') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('faq') }}">FAQ</a>
+            <a id="nav-home" data-testid="nav-home" class="font-label-lg text-label-lg {{ request()->routeIs('home') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('home') }}">Home</a>
+            <a id="nav-products" data-testid="nav-products" class="font-label-lg text-label-lg {{ request()->routeIs('katalog') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('katalog') }}">Products</a>
+            <a id="nav-articles" data-testid="nav-articles" class="font-label-lg text-label-lg {{ request()->routeIs('artikel*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('artikel') }}">Articles</a>
+            <a id="nav-faq" data-testid="nav-faq" class="font-label-lg text-label-lg {{ request()->routeIs('faq') ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary transition-colors' }}" href="{{ route('faq') }}">FAQ</a>
         </div>
 
         <!-- CTA + Mobile Menu Button -->
         <div class="flex items-center gap-4">
-            <a href="{{ route('konsultasi') }}" class="hidden md:inline-block bg-primary text-on-primary px-6 py-2 rounded-full font-label-lg text-label-lg hover:bg-on-primary-fixed-variant transition-all shadow-sm">
+            <a id="nav-contact" data-testid="nav-contact" href="{{ route('konsultasi') }}" class="hidden md:inline-block bg-primary text-on-primary px-6 py-2 rounded-full font-label-lg text-label-lg hover:bg-on-primary-fixed-variant transition-all shadow-sm">
                 Contact Us
             </a>
             <!-- Mobile Hamburger -->
@@ -67,11 +67,11 @@
     <!-- Mobile Dropdown Menu -->
     <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t border-glass-border">
         <div class="flex flex-col px-gutter py-sm gap-1">
-            <a class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('home') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('home') }}">Home</a>
-            <a class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('katalog') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('katalog') }}">Products</a>
-            <a class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('artikel*') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('artikel') }}">Articles</a>
-            <a class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('faq') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('faq') }}">FAQ</a>
-            <a href="{{ route('konsultasi') }}" class="mt-3 mb-2 text-center bg-primary text-on-primary px-6 py-3 rounded-full font-label-lg text-label-lg hover:bg-on-primary-fixed-variant transition-all shadow-sm">
+            <a id="nav-home-mobile" data-testid="nav-home-mobile" class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('home') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('home') }}">Home</a>
+            <a id="nav-products-mobile" data-testid="nav-products-mobile" class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('katalog') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('katalog') }}">Products</a>
+            <a id="nav-articles-mobile" data-testid="nav-articles-mobile" class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('artikel*') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('artikel') }}">Articles</a>
+            <a id="nav-faq-mobile" data-testid="nav-faq-mobile" class="font-label-lg text-label-lg py-3 border-b border-glass-border {{ request()->routeIs('faq') ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ route('faq') }}">FAQ</a>
+            <a id="nav-contact-mobile" data-testid="nav-contact-mobile" href="{{ route('konsultasi') }}" class="mt-3 mb-2 text-center bg-primary text-on-primary px-6 py-3 rounded-full font-label-lg text-label-lg hover:bg-on-primary-fixed-variant transition-all shadow-sm">
                 Contact Us
             </a>
         </div>
@@ -130,12 +130,12 @@
         <div class="md:w-1/3">
             <h4 class="font-label-lg text-label-lg text-on-surface mb-sm">Navigation</h4>
             <ul class="space-y-2 font-body-sm text-body-sm flex flex-col">
-                <li><a class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#tentang-kami">About Us</a></li>
-                <li><a class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#fitur">Features</a></li>
-                <li><a class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('katalog') }}">Products</a></li>
-                <li><a class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#tim">Team</a></li>
-                <li><a class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('artikel') }}">Articles</a></li>
-                <li><a class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#faq">FAQ</a></li>
+                <li><a id="footer-about" data-testid="footer-about" class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#tentang-kami">About Us</a></li>
+                <li><a id="footer-features" data-testid="footer-features" class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#fitur">Features</a></li>
+                <li><a id="footer-products" data-testid="footer-products" class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('katalog') }}">Products</a></li>
+                <li><a id="footer-team" data-testid="footer-team" class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#tim">Team</a></li>
+                <li><a id="footer-articles" data-testid="footer-articles" class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('artikel') }}">Articles</a></li>
+                <li><a id="footer-faq" data-testid="footer-faq" class="text-on-surface-variant hover:text-primary transition-colors" href="{{ route('home') }}#faq">FAQ</a></li>
             </ul>
         </div>
 
