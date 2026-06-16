@@ -22,22 +22,21 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install PHP Dependencies (untuk Filament CSS)
-        run: composer install --prefer-dist --no-progress
+      # Build vendor/ memakai PHP 8.4 di CI (server PHP 8.3 tidak bisa install
+      # karena dependency butuh >= 8.4). vendor/ ini akan IKUT di-upload.
+      - name: Install PHP Dependencies
+        run: composer install --optimize-autoloader --no-dev --prefer-dist --no-progress
 
       - name: Install JS Dependencies and Build
         run: |
           npm install
           npm run build
-          # Hapus folder yang tidak perlu diupload agar transfer cepat
+          # Hapus yang tidak perlu (TAPI biarkan vendor/ agar ikut terupload)
           rm -rf node_modules
-          rm -rf vendor
           rm -rf .git
 
-      # nginx di server sudah dikonfigurasi: root = public_html/public.
-      # Maka public_html HARUS berupa folder project Laravel (punya subfolder public/),
-      # BUKAN symlink. Langkah ini membatalkan symlink lama (jika ada) & memulihkan
-      # struktur folder nyata, sambil menjaga .env tetap ada.
+      # nginx server: root = public_html/public, jadi public_html harus folder
+      # project (punya subfolder public/), bukan symlink. Pulihkan jika perlu.
       - name: Prepare Directory
         uses: appleboy/ssh-action@master
         with:
@@ -47,13 +46,8 @@ jobs:
           script: |
             cd web/kelas-b-5.informatika-unjedir.web.id
             if [ -L public_html ]; then
-              echo ">> Membatalkan symlink public_html, memulihkan folder project"
               rm -f public_html
-              if [ -d app ]; then
-                mv app public_html   # 'app' berisi project + .env yang sudah diselamatkan
-              else
-                mkdir -p public_html
-              fi
+              if [ -d app ]; then mv app public_html; else mkdir -p public_html; fi
             fi
             mkdir -p public_html
 
@@ -75,24 +69,31 @@ jobs:
           script: |
             cd web/kelas-b-5.informatika-unjedir.web.id/public_html
 
-            # Install PHP Dependencies (Composer)
-            composer install --optimize-autoloader --no-dev
+            # Pilih PHP 8.4 bila tersedia (project butuh PHP >= 8.4)
+            PHP_BIN=$(command -v php8.4 || command -v php)
+            echo ">> Memakai PHP: $PHP_BIN"; $PHP_BIN -v | head -1
+            echo ">> PHP yang terinstall di server:"; ls /usr/bin/php* 2>/dev/null || true
 
             # Pastikan .env ada
-            if [ ! -f .env ]; then
-              cp .env.example .env
-              php artisan key:generate
+            if [ ! -f .env ]; then cp .env.example .env; fi
+
+            # Set APP_URL ke domain produksi
+            sed -i 's|^APP_URL=.*|APP_URL=https://kelas-b-5.informatika-unjedir.web.id|' .env
+
+            # Generate APP_KEY jika masih kosong/invalid
+            if ! grep -q "^APP_KEY=base64" .env; then
+              echo ">> APP_KEY kosong, generate baru"
+              $PHP_BIN artisan key:generate --force
             fi
 
-            # Jalankan Migrasi & Link Storage & Clear Cache
-            php artisan migrate --force
-            php artisan storage:link
-            php artisan optimize:clear
+            # vendor/ sudah diupload dari CI -> TIDAK perlu composer install di server.
+            $PHP_BIN artisan migrate --force
+            $PHP_BIN artisan storage:link
+            $PHP_BIN artisan optimize:clear
 
-            # Set Permission agar tidak Permission Denied
             chmod -R 775 storage bootstrap/cache database
 
-      - name: Diagnose 500
+      - name: Diagnose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -100,20 +101,12 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd web/kelas-b-5.informatika-unjedir.web.id
-            echo "===== DOMAIN DIR ====="
-            ls -la
-            echo "===== readlink public_html ====="
-            readlink -f public_html
+            echo "===== VERSI PHP FPM DOMAIN (dari fastcgi_pass) ====="
+            grep -rhE "fastcgi_pass|php[0-9]+\.[0-9]+" conf/web/kelas-b-5.informatika-unjedir.web.id/ 2>/dev/null | sort -u || echo "tidak terbaca"
             cd public_html
-            echo "===== ISI public_html (30) ====="
-            ls -la | head -30
-            echo "===== .env penting ====="
-            grep -E "^APP_ENV|^APP_DEBUG|^APP_URL|^DB_CONNECTION|^DB_DATABASE|^SESSION_DRIVER" .env 2>/dev/null
-            grep -q "^APP_KEY=base64" .env && echo "APP_KEY: ADA" || echo "APP_KEY: KOSONG/INVALID"
-            echo "===== Aktifkan APP_DEBUG sementara ====="
-            sed -i 's/^APP_DEBUG=.*/APP_DEBUG=true/' .env
-            php artisan optimize:clear
-            echo "===== PERM storage & cache ====="
-            ls -ld storage storage/logs storage/framework storage/framework/views bootstrap/cache 2>/dev/null
-            echo "===== 60 BARIS LARAVEL LOG ====="
-            tail -n 60 storage/logs/laravel.log 2>/dev/null || echo "log kosong/tidak ada"
+            echo "===== vendor/autoload.php ADA? ====="
+            [ -f vendor/autoload.php ] && echo "ADA" || echo "TIDAK ADA"
+            echo "===== APP_KEY ====="
+            grep -q "^APP_KEY=base64" .env && echo "APP_KEY: ADA" || echo "APP_KEY: KOSONG"
+            echo "===== 40 BARIS LARAVEL LOG ====="
+            tail -n 40 storage/logs/laravel.log 2>/dev/null || echo "log kosong"
