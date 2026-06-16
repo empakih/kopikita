@@ -80,9 +80,9 @@ Klik link berikut untuk melihat langsung di GitHub (PDF ditampilkan otomatis ole
 | 🧪 [Skenario UAT (PDF)](document-project/UAT-Skenario-Pengujian.pdf) | 30 skenario *User Acceptance Testing* (versi untuk dosen) |
 | 📊 [Laporan TestSprite (PDF)](document-project/TestSprite-Report.pdf) | Hasil pengujian otomatis *end-to-end* (internal tim) |
 | 📝 [Catatan Dosen](document-project/catatan-dosen.md) | Rangkuman *requirement* & arahan dari dosen pembimbing |
+| 🔒 [PRD TestSprite (PDF)](document-project/PRD-Smartani-TestSprite.pdf) | *Product Requirements Document* untuk tool testing — **internal tim** |
 
-> Catatan: PRD (untuk tool testing) bersifat **internal & berisi kredensial admin**,
-> jadi sengaja **tidak** dimasukkan ke repo. Minta langsung ke pemilik repo bila diperlukan.
+> ⚠️ **PRD berisi kredensial admin** — untuk **internal tim saja**, jangan disertakan ke dosen.
 
 ---
 

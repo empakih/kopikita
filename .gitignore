@@ -25,8 +25,3 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
-
-# PRD internal berisi kredensial admin & ditandai "jangan untuk dosen" — JANGAN commit.
-# Dokumen lain di document-project/ sengaja dibagikan ke tim (di-link dari README).
-/document-project/PRD-Smartani-TestSprite.md
-/document-project/PRD-Smartani-TestSprite.pdf
