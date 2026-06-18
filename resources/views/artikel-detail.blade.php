@@ -1,4 +1,4 @@
-<x-layout title="Artikel | Smartani">
+<x-layout title="Artikel | Kopikita">
     <main class="pt-20">
 <!-- Hero Section -->
 <header class="w-full bg-surface-container-lowest">
@@ -18,7 +18,7 @@
     {{ strtoupper(substr($article->author ?? 'Admin', 0, 1)) }}
 </div>
 <div>
-<p class="font-label-lg text-label-lg text-on-surface">{{ $article->author ?? 'Admin Smartani' }}</p>
+<p class="font-label-lg text-label-lg text-on-surface">{{ $article->author ?? 'Tim Kopikita' }}</p>
 <p class="font-body-sm text-body-sm text-on-surface-variant">Penulis</p>
 </div>
 </div>
@@ -32,7 +32,7 @@
 </div>
 <div class="max-w-container-max mx-auto px-gutter">
 <div class="aspect-[21/9] w-full rounded-xl overflow-hidden shadow-xl shadow-primary/5 reveal-on-scroll" data-delay="200">
-<img alt="{{ $article->title }}" class="w-full h-full object-cover" src="{{ $article->thumbnail ? asset('storage/' . $article->thumbnail) : 'https://placehold.co/1200x600/1E293B/50C878?text=' . urlencode($article->title) }}"/>
+<img alt="{{ $article->title }}" class="w-full h-full object-cover" loading="lazy" decoding="async" src="{{ $article->thumbnail ? asset('storage/' . $article->thumbnail) : asset('images/artikel.jpg') }}"/>
 </div>
 </div>
 </header>
@@ -49,7 +49,7 @@
 <div class="flex justify-between items-end mb-lg reveal-on-scroll" data-delay="100">
 <div>
 <h2 class="font-headline-lg text-headline-lg text-on-surface">Artikel Terkait</h2>
-<p class="font-body-md text-body-md text-on-surface-variant">Pelajari lebih lanjut tentang inovasi kami</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Cerita &amp; tips kopi lainnya buat kamu</p>
 </div>
 <a class="text-primary font-label-lg text-label-lg flex items-center gap-xs hover:gap-sm transition-all" href="{{ route('artikel') }}">
     Lihat Semua Artikel <span class="material-symbols-outlined">arrow_forward</span>
@@ -59,7 +59,7 @@
     @foreach($relatedArticles as $index => $related)
     <div class="group bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/20 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer reveal-on-scroll" data-delay="{{ ($index + 1) * 100 }}" onclick="window.location.href='{{ route('artikel.detail', $related->slug) }}'">
         <div class="aspect-video overflow-hidden relative">
-            <img alt="{{ $related->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="{{ $related->thumbnail ? asset('storage/' . $related->thumbnail) : 'https://placehold.co/600x400/1E293B/50C878?text=' . urlencode($related->title) }}"/>
+            <img alt="{{ $related->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" src="{{ $related->thumbnail ? asset('storage/' . $related->thumbnail) : asset('images/artikel.jpg') }}"/>
             @if($related->category)
             <div class="absolute top-4 left-4">
                 <span class="bg-white/90 backdrop-blur-md text-primary px-3 py-1 rounded-full text-label-sm font-label-sm shadow-sm">{{ $related->category }}</span>

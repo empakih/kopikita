@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -18,11 +19,11 @@ class ProductForm
                     ->required(),
                 TextInput::make('price')
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('Rp'),
                 TextInput::make('price_label'),
                 Textarea::make('description')
                     ->columnSpanFull(),
-                \Filament\Forms\Components\RichEditor::make('content')
+                RichEditor::make('content')
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->image()

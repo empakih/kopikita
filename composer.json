@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "kopikita/cpmk4-pemweb-kopikita",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Kopikita — toko biji kopi & alat seduh (Laravel + Filament). Proyek Pemweb II CPMK4.",
+    "keywords": ["laravel", "filament", "kopikita"],
     "license": "MIT",
     "require": {
         "php": "^8.3",

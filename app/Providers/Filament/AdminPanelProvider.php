@@ -29,13 +29,17 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->darkMode(false)
+            ->brandName('Kopikita')
+            ->brandLogo(fn () => view('filament.logo'))
+            ->brandLogoHeight('2.25rem')
+            ->favicon(asset('favicon.ico'))
             ->login()
             ->colors([
-                'primary' => '#50C878',
-                'danger' => '#FFB4AB',
-                'gray' => Color::Zinc,
-                'info' => '#BF40BF',
-                'success' => '#6EE591',
+                'primary' => '#6F4E37', // cokelat kopi (espresso)
+                'danger' => Color::Red,
+                'gray' => Color::Stone,
+                'info' => '#A9746E',
+                'success' => '#6B8E5A',
                 'warning' => Color::Amber,
             ])
             ->font('Inter')

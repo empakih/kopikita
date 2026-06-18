@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('price', 15, 2)->nullable();
-            $table->string('price_label')->nullable(); // misal: "Mulai dari $4,500" atau "$120/node"
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->string('category')->nullable(); // misal: "Kit Pertanian", "Jasa Pemasangan", "Pakan Peternakan"
-            $table->boolean('is_bestseller')->default(false);
+            $table->string('name');                                 // nama produk, mis. "Biji Kopi Arabika Gayo 200g"
+            $table->decimal('price', 15, 2)->nullable();            // harga angka, mis. 65000
+            $table->string('price_label')->nullable();              // label harga yang ditampilkan, mis. "Rp 65.000"
+            $table->text('description')->nullable();                // deskripsi singkat (kartu katalog)
+            $table->longText('content')->nullable();                // detail panjang (halaman detail produk)
+            $table->string('image')->nullable();                    // path gambar di storage
+            $table->string('category')->nullable();                 // mis. "Biji Kopi", "Alat Seduh", "Grinder", "Mesin"
+            $table->boolean('is_bestseller')->default(false);       // tandai produk terlaris
             $table->timestamps();
         });
     }

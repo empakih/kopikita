@@ -3,8 +3,9 @@
 namespace App\Filament\Resources\Articles\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 
 class ArticleForm
@@ -16,9 +17,12 @@ class ArticleForm
                 TextInput::make('title')
                     ->required(),
                 TextInput::make('slug'),
-                \Filament\Forms\Components\RichEditor::make('content')
+                RichEditor::make('content')
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory('articles/content')
+                    ->fileAttachmentsVisibility('public')
                     ->columnSpanFull(),
-                \Filament\Forms\Components\FileUpload::make('thumbnail')
+                FileUpload::make('thumbnail')
                     ->image()
                     ->disk('public')
                     ->directory('articles'),

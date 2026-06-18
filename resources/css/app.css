@@ -6,56 +6,76 @@
 @source '../**/*.js';
 
 @theme {
-    /* Colors */
-    --color-surface-bright: #faf8ff;
-    --color-on-surface-variant: #3e4a3f;
-    --color-outline-variant: #bdcabc;
-    --color-secondary-fixed: #73f9dc;
-    --color-outline: #6e7a6e;
-    --color-on-secondary: #ffffff;
-    --color-surface-container-low: #f2f3ff;
-    --color-surface-container: #eaedff;
-    --color-on-primary-fixed-variant: #005227;
-    --color-tertiary-container: #ff9a2a;
-    --color-secondary-container: #73f9dc;
-    --color-tertiary: #8d4f00;
-    --color-surface-tint: #F0F9F4;
-    --color-background: #faf8ff;
-    --color-inverse-on-surface: #eef0ff;
-    --color-on-error-container: #93000a;
-    --color-primary-fixed: #83fba5;
-    --color-on-tertiary-container: #683900;
-    --color-surface-container-high: #e2e7ff;
-    --color-on-background: #131b2e;
-    --color-on-secondary-fixed: #00201a;
-    --color-surface: #faf8ff;
-    --color-inverse-surface: #283044;
-    --color-surface-dim: #d2d9f4;
-    --color-surface-container-highest: #dae2fd;
-    --color-primary-fixed-dim: #66dd8b;
-    --color-glass-border: rgba(80, 200, 120, 0.15);
-    --color-on-tertiary-fixed-variant: #6b3b00;
-    --color-primary-container: #50c878;
-    --color-on-secondary-container: #007260;
-    --color-secondary-fixed-dim: #52dcc0;
-    --color-on-tertiary: #ffffff;
-    --color-surface-variant: #dae2fd;
-    --color-primary: #006d36;
-    --color-on-error: #ffffff;
-    --color-on-tertiary-fixed: #2d1600;
-    --color-error-container: #ffdad6;
-    --color-on-secondary-fixed-variant: #005144;
-    --color-error: #ba1a1a;
-    --color-secondary: #006b5b;
-    --color-on-primary-fixed: #00210c;
+    /* =====================================================================
+       PALET KOPI (Kopikita)
+       Hanya 4 warna inti yang perlu diingat:
+         - primary  #6F4E37  (cokelat espresso)  -> tombol, link, aksen
+         - secondary#9C6B4A  (karamel)           -> aksen sekunder
+         - background#FAF6F0 (krem susu)         -> latar halaman
+         - on-surface#2A1E16 (cokelat tua)       -> warna teks
+       Token lain di bawah hanyalah turunan/tingkat terang dari 4 warna ini.
+       ===================================================================== */
+
+    /* Primary — cokelat espresso */
+    --color-primary: #6F4E37;
     --color-on-primary: #ffffff;
+    --color-primary-container: #EADBC8;        /* krem caramel (latar tombol lembut) */
+    --color-on-primary-container: #4A2C1A;
+    --color-primary-fixed: #EADBC8;
+    --color-primary-fixed-dim: #D8C0A2;
+    --color-on-primary-fixed: #2A1A0E;
+    --color-on-primary-fixed-variant: #4A2C1A; /* cokelat lebih gelap (hover tombol) */
+    --color-inverse-primary: #D8B48C;
+
+    /* Secondary — karamel */
+    --color-secondary: #9C6B4A;
+    --color-on-secondary: #ffffff;
+    --color-secondary-container: #F0DCC4;
+    --color-on-secondary-container: #5A3A22;
+    --color-secondary-fixed: #F0DCC4;
+    --color-secondary-fixed-dim: #E0C3A0;
+    --color-on-secondary-fixed: #2A1A0E;
+    --color-on-secondary-fixed-variant: #5A3A22;
+
+    /* Tertiary — cinnamon (aksen hangat) */
+    --color-tertiary: #B07D52;
+    --color-on-tertiary: #ffffff;
+    --color-tertiary-container: #F5D9B8;
+    --color-on-tertiary-container: #5A3A1A;
+    --color-tertiary-fixed: #F5D9B8;
+    --color-tertiary-fixed-dim: #E6BE8C;
+    --color-on-tertiary-fixed: #2A1A0E;
+    --color-on-tertiary-fixed-variant: #6B4A22;
+
+    /* Surface & background — nuansa krem */
+    --color-background: #FAF6F0;
+    --color-on-background: #2A1E16;
+    --color-surface: #FAF6F0;
+    --color-surface-bright: #FFFDF9;
+    --color-surface-dim: #E8DDD0;
+    --color-surface-tint: #F3E9DD;
     --color-surface-container-lowest: #ffffff;
-    --color-tertiary-fixed-dim: #ffb876;
-    --color-on-surface: #131b2e;
-    --color-deep-forest: #064E3B;
-    --color-inverse-primary: #66dd8b;
-    --color-tertiary-fixed: #ffdcc0;
-    --color-on-primary-container: #005025;
+    --color-surface-container-low: #F5EDE4;
+    --color-surface-container: #F0E6DA;
+    --color-surface-container-high: #EADDCD;
+    --color-surface-container-highest: #E5D6C3;
+    --color-surface-variant: #E5D6C3;
+    --color-on-surface: #2A1E16;               /* teks utama (cokelat tua) */
+    --color-on-surface-variant: #5C4A3D;       /* teks sekunder (cokelat muda) */
+    --color-inverse-surface: #382A20;
+    --color-inverse-on-surface: #F5EDE4;
+
+    /* Garis & border */
+    --color-outline: #8A7765;
+    --color-outline-variant: #D8C7B5;
+    --color-glass-border: rgba(111, 78, 55, 0.15);
+    --color-deep-forest: #3B2417;              /* cokelat sangat gelap (dark roast) untuk CTA */
+
+    /* Error — tetap merah standar */
+    --color-error: #ba1a1a;
+    --color-on-error: #ffffff;
+    --color-error-container: #ffdad6;
+    --color-on-error-container: #93000a;
 
     /* Border Radius */
     --radius-DEFAULT: 0.25rem;
@@ -142,17 +162,37 @@
     transition: all 0.3s ease;
 }
 .card-hover-shadow:hover {
-    box-shadow: 0 20px 40px rgba(80, 200, 120, 0.08);
+    box-shadow: 0 20px 40px rgba(111, 78, 55, 0.10);
     transform: translateY(-4px);
 }
 
-/* Accordion Styles */
+/* Accordion Styles — smooth open/close via animatable grid-rows */
 .accordion-content {
-    display: none;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .accordion-item.active .accordion-content {
-    display: block;
+    grid-template-rows: 1fr;
+}
+.accordion-content-inner {
+    overflow: hidden;
+    min-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.4s ease 0.05s, transform 0.4s ease 0.05s;
+}
+.accordion-item.active .accordion-content-inner {
+    opacity: 1;
+    transform: translateY(0);
 }
 .accordion-item.active .accordion-icon {
     transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+    .accordion-content,
+    .accordion-content-inner,
+    .accordion-icon {
+        transition: none;
+    }
 }

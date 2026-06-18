@@ -1,206 +1,297 @@
-# 🌱 Smartani - Precision Agriculture CMS
+# ☕ Kopikita
 
-Selamat datang di repositori proyek **Smartani**! 
-Proyek ini adalah sebuah *Dynamic Company Profile* berbasis *Content Management System (CMS)* yang dirancang untuk mempromosikan teknologi *greenhouse* cerdas (IoT) dengan pendekatan yang elegan, interaktif, dan *"Down to Earth"*.
+Website **toko biji kopi & alat seduh** — pelanggan bisa lihat katalog produk dan baca artikel seputar kopi, sementara admin mengelola isinya lewat dashboard.
+
+Dibangun dengan **Laravel + Filament**. Proyek kuliah **Pemweb II (CPMK4)**, sengaja dibuat **sederhana supaya mudah dijelaskan** (routing → controller → model → migration → Blade + CRUD admin).
 
 ---
 
 ## 📑 Daftar Isi
-1. [Deskripsi Proyek](#-deskripsi-proyek)
-2. [Tech Stack](#-tech-stack)
-3. [Fitur-Fitur Utama](#-fitur-fitur-utama)
-4. [Catatan Penting dari Dosen (Requirements)](#-catatan-penting-dari-dosen-requirements)
-5. [Dokumentasi Proyek](#-dokumentasi-proyek)
-6. [Struktur Direktori Penting](#-struktur-direktori-penting)
-7. [Panduan Instalasi & Menjalankan Lokal](#-panduan-instalasi--menjalankan-lokal)
-8. [Workflow & Kolaborasi Tim](#-workflow--kolaborasi-tim)
 
----
-
-## 🎯 Deskripsi Proyek
-Website ini dirancang bukan sekadar sebagai *landing page* statis, melainkan platform dinamis di mana **semua konten visual dan teks dikelola langsung dari *Dashboard Admin***. 
-Hal ini bertujuan untuk mempermudah pembaruan konten dan mengantisipasi ekspansi bisnis Smartani di masa depan (misal: merambah ke sektor peternakan) tanpa perlu membongkar ulang *source code*.
+1. [Tech Stack](#-tech-stack)
+2. [Fitur](#-fitur)
+3. [Prasyarat (WAJIB dibaca dulu)](#-prasyarat-wajib-dibaca-dulu)
+4. [Cara Install (langkah demi langkah)](#-cara-install-langkah-demi-langkah)
+5. [Menjalankan Aplikasi](#-menjalankan-aplikasi)
+6. [Akun Admin](#-akun-admin)
+7. [Perintah yang Sering Dipakai](#-perintah-yang-sering-dipakai)
+8. [Struktur Folder Penting](#-struktur-folder-penting)
+9. [Troubleshooting (kalau error)](#-troubleshooting-kalau-error)
+10. [Alur Kerja Tim (Git)](#-alur-kerja-tim-git)
+11. [Deployment (Produksi)](#-deployment-produksi)
 
 ---
 
 ## 🚀 Tech Stack
-Proyek ini dibangun menggunakan teknologi modern yang berfokus pada kecepatan, keamanan, dan pengalaman *developer* yang menyenangkan:
-- **Backend Framework:** Laravel 13 (PHP 8.3)
-- **CMS / Admin Panel:** Filament (v3/v5.x)
-- **Frontend Styling:** Tailwind CSS v4 + Vite
-- **Database:** SQLite (Bisa dengan mudah di-*switch* ke MySQL untuk tahap *production*)
-- **Icons & Fonts:** Material Symbols Outlined & Google Fonts (Inter)
+
+| Bagian | Teknologi |
+|--------|-----------|
+| Framework | Laravel 13 (PHP 8.3+) |
+| Admin Panel / CMS | Filament v5 |
+| Styling | Tailwind CSS v4 (di-build pakai Vite) |
+| Navigasi cepat | Hotwired **Turbo** (pindah halaman tanpa reload, ala SPA) |
+| Database | **SQLite** (default, paling gampang) — bisa diganti MySQL |
+| Font & Ikon | Google Fonts (Inter) + Material Symbols |
+
+Hanya ada **2 entitas** di database: **Product** (biji kopi & alat) dan **Article** (blog). Halaman **FAQ** dan **Kontak** bersifat statis (tanpa database).
 
 ---
 
-## ✨ Fitur-Fitur Utama
+## ✨ Fitur
 
-### 1. Visualisasi Sensor Interaktif (Dinamis)
-Menampilkan data indikator sensor (seperti Suhu, Kelembapan, pH Air, dll.) di halaman utama. Semua nama sensor, satuan, dan ikon **tidak di-*hardcode***, melainkan dikontrol dari CMS.
+**Sisi pengunjung (publik):**
+- Beranda: hero, produk terlaris, tentang kami, artikel terbaru.
+- Produk: katalog dengan **filter kategori instan** (diproses di browser, tanpa reload) + halaman detail produk.
+- Artikel: daftar artikel dengan filter kategori + halaman detail artikel.
+- FAQ & Kontak: halaman statis (form kontak hanya simulasi front-end).
 
-### 2. Katalog Produk & Layanan (Highlight Interaktif)
-Menyoroti layanan unggulan Smartani (seperti jasa pembuatan *greenhouse* atau produk pelet) dengan *layout zig-zag* yang responsif. Terdapat fitur *pop-up/modal* interaktif untuk pengalaman pengguna (UX) yang lebih menarik tanpa teks yang membosankan.
-
-### 3. Manajemen Artikel (SEO-Optimized)
-Modul blog/berita untuk strategi *content marketing* (seperti Alodokter). Menggunakan **Rich Text Editor (CKEditor)** di *dashboard admin* agar teks dapat diatur tebal/miring dan disisipkan gambar. Dilengkapi dengan pengaturan *thumbnail* dan kategori.
-
-### 4. Formulir Contact Us Terintegrasi
-Pengunjung dapat langsung mengirimkan pesan atau permintaan konsultasi. Data tidak dikirim statis via email, melainkan masuk ke *database* dan dapat di-*review* oleh Admin melalui tabel khusus di panel Filament.
-
-### 5. CMS Admin Dashboard
-Panel kendali terpusat yang bersih (*clean UI*) yang ditujukan untuk **satu *role*** (Admin/Pemilik). Tidak ada sistem *role* berlapis karena web ini berfokus pada *company profile*, bukan *e-commerce* transaksional multi-user.
+**Sisi admin (`/admin`):**
+- Login satu role (admin).
+- CRUD **Produk** dan **Artikel** (lengkap dengan upload gambar & rich text editor).
+- Dashboard ringkasan: total produk, produk terlaris, total artikel.
 
 ---
 
-## 📋 Catatan Penting dari Dosen (Requirements)
+## ⚠️ Prasyarat (WAJIB dibaca dulu)
 
-Dokumen ini memuat rangkuman kesepakatan dan target yang **wajib dipatuhi** oleh seluruh anggota tim berdasarkan *review* dosen pembimbing:
+Pastikan sudah terpasang:
 
-1. **NO HARDCODING!** Semua data, gambar, dan teks di *front-end* wajib bersifat dinamis (mengambil dari *database*).
-2. **Efisiensi Database (Clean Code):** Dilarang menggunakan tipe data yang boros. Contoh: *Field* nama tidak boleh menggunakan `TEXT`, gunakan `VARCHAR` dengan *length* secukupnya. Desain ERD harus melalui proses normalisasi yang benar.
-3. **Layout & Animasi:**
-   - Gunakan *Grid System* yang *fluid* dan responsif.
-   - Terapkan layout *Zig-zag* untuk bagian keunggulan/fitur.
-   - Perbanyak elemen interaktif seperti *hover effects* dan *pop-up video/simulasi* ketimbang sekadar teks statis.
-4. **Visi Ekspansi Bisnis:** Arsitektur CMS harus siap menampung data baru jika Smartani nantinya berekspansi (misal ke sektor peternakan).
-5. **Aturan Penamaan untuk Tugas Akhir (TA):** Jika proyek ini berlanjut menjadi bahan TA, **jangan** menggunakan merk dagang "Smartani" secara gamblang. Gunakan istilah akademis: **"Sistem Profil Perusahaan Precision Farming Berbasis Web"** atau sejenisnya.
-6. **Agile Methodology:** Pengerjaan tidak boleh kaku. Prosesnya: *Mockup* UI/UX -> ACC Dosen -> *Coding Front-End & Back-End* -> Testing QA.
+| Tool | Versi | Catatan |
+|------|-------|---------|
+| **PHP** | **>= 8.3** | **Ini paling penting — baca catatan di bawah.** |
+| **Composer** | 2.x | Package manager PHP |
+| **Node.js + npm** | Node 18 atau 20 | Untuk build Tailwind/JS |
+| **Git** | terbaru | — |
 
----
+### 🔴 Penting soal versi PHP
 
-## 📄 Dokumentasi Proyek
+Proyek ini **butuh PHP 8.3 ke atas**. Cek versi kamu:
 
-Dokumen pendukung proyek tersedia di folder [`document-project/`](document-project/).
-Klik link berikut untuk melihat langsung di GitHub (PDF ditampilkan otomatis oleh viewer GitHub):
+```bash
+php -v
+```
 
-| Dokumen | Keterangan |
-|---------|------------|
-| 📘 [SRS (PDF)](document-project/SRS.pdf) | *Software Requirements Specification* — kebutuhan sistem |
-| 📐 [SDD (PDF)](document-project/SDD.pdf) | *Software Design Document* — desain sistem |
-| 🧪 [Skenario UAT (PDF)](document-project/UAT-Skenario-Pengujian.pdf) | 30 skenario *User Acceptance Testing* (versi untuk dosen) |
-| 📊 [Laporan TestSprite (PDF)](document-project/TestSprite-Report.pdf) | Hasil pengujian otomatis *end-to-end* (internal tim) |
-| 📝 [Catatan Dosen](document-project/catatan-dosen.md) | Rangkuman *requirement* & arahan dari dosen pembimbing |
-| 🔒 [PRD TestSprite (PDF)](document-project/PRD-Smartani-TestSprite.pdf) | *Product Requirements Document* untuk tool testing — **internal tim** |
+- **PHP 8.2 ke bawah TIDAK BISA.** Halaman publik mungkin jalan, tapi **panel admin (`/admin`) akan error HTTP 500**.
+- **Pengguna Windows + XAMPP:** XAMPP biasanya membawa PHP 8.2 → ini yang bikin admin error. **Solusi paling gampang: pakai [Laravel Herd](https://herd.laravel.com/windows)** (gratis, sudah termasuk PHP 8.4, Nginx, dan cepat). Setelah install Herd, taruh folder proyek di dalam folder yang dipantau Herd, lalu buka lewat domain `.test` (mis. `http://kopikita.test`).
+- **Pengguna macOS/Linux:** pastikan `php -v` menunjukkan 8.3+.
 
-> ⚠️ **PRD berisi kredensial admin** — untuk **internal tim saja**, jangan disertakan ke dosen.
+> Singkatnya: kalau di Windows, **install Herd** dan jalankan dari situ — paling mulus.
+
+Pastikan juga **ekstensi PHP** ini aktif (biasanya sudah default di Herd): `pdo_sqlite`, `mbstring`, `intl`, `gd`, `zip`.
 
 ---
 
-## 📂 Struktur Direktori Penting
+## 🛠️ Cara Install (langkah demi langkah)
 
-Untuk memudahkan navigasi bagi *developer*, berikut adalah folder utama yang perlu Anda ketahui:
+> Jalankan perintah di dalam folder proyek. Contoh diberikan untuk **Windows (PowerShell)** dan **macOS/Linux**.
 
-```text
-smartani-final/
-├── app/
-│   ├── Filament/Resources/  # -> Logika Dashboard CMS Admin (CRUD Sensor, Artikel, dll)
-│   ├── Http/Controllers/    # -> Logika Back-end Front-office (Mengirim data ke Blade)
-│   └── Models/              # -> Definisi Database (Eloquent ORM)
-├── database/
-│   ├── migrations/          # -> Skema/Struktur Tabel Database (Jangan diedit manual di DB!)
-│   └── database.sqlite      # -> File Database lokal Anda
-├── resources/
-│   ├── css/ & js/           # -> Asset Tailwind CSS V4 dan Scripts pendukung
-│   └── views/               # -> File tampilan antarmuka (Blade HTML)
-│       ├── components/      # -> Reusable UI (Navbar, Footer, Layout utama)
-│       └── *.blade.php      # -> Halaman spesifik (home, katalog, artikel, dll)
-└── routes/
-    └── web.php              # -> Definisi semua rute URL website
+### 1. Clone repo
+
+```bash
+git clone <URL-REPO-PRIVATE-TIM>
+cd CPMK4-PEMWEB-KOPIKITA
+```
+
+### 2. Install dependency PHP & JavaScript
+
+```bash
+composer install
+npm install
+```
+
+### 3. Siapkan file `.env`
+
+Salin template `.env.example` jadi `.env`:
+
+```bash
+# Windows (PowerShell)
+Copy-Item .env.example .env
+
+# macOS / Linux
+cp .env.example .env
+```
+
+Lalu buat APP_KEY:
+
+```bash
+php artisan key:generate
+```
+
+### 4. Siapkan database (SQLite — default)
+
+Buat file database kosong:
+
+```bash
+# Windows (PowerShell)
+New-Item database/database.sqlite -ItemType File
+
+# macOS / Linux
+touch database/database.sqlite
+```
+
+Lalu buat tabel **dan** isi data contoh (produk, artikel, akun admin):
+
+```bash
+php artisan migrate --seed
+```
+
+> Mau pakai MySQL? Lihat [Troubleshooting](#-troubleshooting-kalau-error) di bawah.
+
+### 5. Buat symlink storage (supaya gambar upload tampil)
+
+```bash
+php artisan storage:link
+```
+
+### 6. Build asset front-end (Tailwind & JS)
+
+Folder hasil build (`public/build`) **tidak ikut di-commit**, jadi **wajib di-build sendiri** setelah clone:
+
+```bash
+npm run build
+```
+
+✅ **Selesai!** Lanjut ke cara menjalankan di bawah.
+
+> **Shortcut:** sebagian besar langkah 2–6 bisa dijalankan sekaligus dengan `composer setup` (tetap perlu `migrate --seed` & `storage:link` manual kalau mau data contoh + gambar).
+
+---
+
+## ▶️ Menjalankan Aplikasi
+
+### Cara A — Laravel Herd (disarankan, terutama Windows)
+
+Kalau proyek sudah dibuka lewat Herd, langsung akses domain `.test`-nya (mis. `http://kopikita.test`). Tidak perlu `php artisan serve`. Saat **mengembangkan tampilan**, jalankan Vite biar perubahan langsung kelihatan:
+
+```bash
+npm run dev
+```
+
+### Cara B — `php artisan serve`
+
+Butuh **dua terminal**:
+
+```bash
+# Terminal 1 — server Laravel
+php artisan serve
+
+# Terminal 2 — Vite (live reload saat ngoding tampilan)
+npm run dev
+```
+
+Lalu buka:
+- **Website:** http://localhost:8000
+- **Admin:** http://localhost:8000/admin
+
+> **`npm run dev` vs `npm run build`:**
+> - `npm run dev` → mode ngoding, perubahan CSS/JS langsung muncul (jangan ditutup selama ngoding tampilan).
+> - `npm run build` → hasil final untuk dipakai tanpa Vite (mis. mau demo cepat). Jalankan ulang tiap habis ubah CSS/JS kalau tidak pakai `npm run dev`.
+
+---
+
+## 🔑 Akun Admin
+
+Dibuat otomatis oleh seeder (langkah `migrate --seed`):
+
+- **Email:** `admin@kopikita.id`
+- **Password:** `password123`
+
+Login di `/admin`.
+
+---
+
+## 🧰 Perintah yang Sering Dipakai
+
+```bash
+php artisan migrate:fresh --seed   # reset DB + isi ulang data contoh (HATI-HATI: hapus semua data)
+php artisan db:seed                # isi data contoh saja
+php artisan storage:link           # buat ulang symlink storage
+php artisan optimize:clear         # bersihkan semua cache (config/route/view)
+npm run dev                        # Vite mode ngoding
+npm run build                      # build asset final
 ```
 
 ---
 
-## 🛠️ Panduan Instalasi & Menjalankan Lokal
+## 📂 Struktur Folder Penting
 
-Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di laptop masing-masing anggota tim:
-
-### Prasyarat
-- **PHP** >= 8.3
-- **Composer** (Package Manager PHP)
-- **Node.js & NPM** (Package Manager JS/CSS)
-- *Git*
-
-### Langkah-langkah
-
-1. **Clone Repositori**
-   ```bash
-   git clone <link-repo-github-private-kalian>
-   cd smartani-final
-   ```
-
-2. **Install Dependensi PHP & Node.js**
-   ```bash
-   composer install
-   npm install
-   ```
-
-3. **Pengaturan *Environment***
-   *Copy* file `.env.example` menjadi `.env`.
-   ```bash
-   cp .env.example .env
-   ```
-   Lalu *generate application key* Laravel:
-   ```bash
-   php artisan key:generate
-   ```
-
-4. **Siapkan Database**
-   Default-nya SQLite. Buat dulu file database kosongnya, lalu jalankan migrasi **beserta seeder** (mengisi data demo + membuat akun admin):
-   ```bash
-   # Buat file SQLite kosong:
-   #   Linux/Mac : touch database/database.sqlite
-   #   Windows   : New-Item database/database.sqlite -ItemType File
-
-   php artisan migrate --seed
-   ```
-   > ⚠️ Jika muncul error `could not find driver` (PHP tanpa driver SQLite), pakai MySQL:
-   > set `DB_CONNECTION=mysql` + kredensial DB Anda di `.env`, lalu `php artisan migrate --seed`.
-
-5. **Symlink Storage (Untuk Gambar/Media)**
-   Agar gambar yang diupload via CMS bisa diakses oleh *front-end*:
-   ```bash
-   php artisan storage:link
-   ```
-
-6. **Jalankan Aplikasi**
-   Anda membutuhkan **dua terminal/CMD** yang berjalan bersamaan:
-   
-   **Terminal 1 (Menjalankan server Laravel):**
-   ```bash
-   php artisan serve
-   ```
-   
-   **Terminal 2 (Menjalankan Vite Asset bundler untuk Tailwind):**
-   ```bash
-   npm run dev
-   ```
-
-7. **Selesai! 🎉**
-   - Website Utama bisa diakses di: `http://localhost:8000`
-   - Dashboard CMS bisa diakses di: `http://localhost:8000/admin`
-   - **Login Admin (otomatis dibuat oleh seeder):**
-     - Email: `admin@smartani.id`
-     - Password: `password123`
+```text
+CPMK4-PEMWEB-KOPIKITA/
+├── app/
+│   ├── Filament/Resources/   # CRUD admin (Products, Articles)
+│   ├── Filament/Widgets/     # Widget dashboard (ringkasan angka)
+│   ├── Http/Controllers/     # HomeController (data untuk beranda)
+│   └── Models/               # Product, Article (Eloquent)
+├── database/
+│   ├── migrations/           # struktur tabel
+│   ├── seeders/              # data contoh + akun admin (DatabaseSeeder)
+│   └── database.sqlite       # file DB lokal (kamu buat sendiri, tidak di-commit)
+├── public/
+│   ├── images/               # gambar statis (hero, dll)
+│   └── build/                # hasil Vite (tidak di-commit → jalankan npm run build)
+├── resources/
+│   ├── css/                  # Tailwind + tema admin
+│   ├── js/app.js             # Turbo
+│   └── views/                # Blade
+│       ├── components/layout.blade.php   # navbar + footer + layout utama
+│       ├── home.blade.php / katalog.blade.php / artikel.blade.php ...
+│       └── faq.blade.php / konsultasi.blade.php  # halaman statis
+└── routes/
+    └── web.php               # semua rute URL
+```
 
 ---
 
-## 🤝 Workflow & Kolaborasi Tim
+## 🩹 Troubleshooting (kalau error)
 
-1. **Gunakan Branching:** Jangan langsung `push` ke `main`. Buat branch baru untuk setiap fitur (contoh: `git checkout -b fitur-artikel`).
-2. **Commit yang Jelas:** Gunakan pesan commit yang deskriptif. (contoh: `git commit -m "feat: menambah halaman detail artikel"`).
-3. **Pull Sebelum Push:** Selalu jalankan `git pull origin main` sebelum melakukan push untuk menghindari bentrok (*conflict*).
-4. **Build Asset Sebelum Rilis:** Jika ada anggota yang bertugas di bagian rilis/production, pastikan selalu menjalankan `npm run build` sebelum *deployment* agar CSS dan JS ter-*compile* ukurannya.
+**Admin `/admin` error HTTP 500, tapi halaman publik normal**
+→ Versi PHP terlalu lama (di bawah 8.3). Cek `php -v`. Pakai PHP 8.3+/Herd. (Lihat [Prasyarat](#-prasyarat-wajib-dibaca-dulu).)
+
+**Tampilan berantakan / CSS & JS tidak muncul**
+→ Asset belum di-build. Jalankan `npm run build` (atau `npm run dev` saat ngoding). Folder `public/build` memang sengaja tidak di-commit.
+
+**`could not find driver` saat `migrate`**
+→ Ekstensi SQLite belum aktif. Aktifkan `pdo_sqlite` di `php.ini`, **atau** pindah ke MySQL: buat database kosong, lalu di `.env` set:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=kopikita
+DB_USERNAME=root
+DB_PASSWORD=
+```
+lalu jalankan lagi `php artisan migrate --seed`.
+
+**Gambar yang di-upload via admin tidak tampil**
+→ Symlink belum dibuat. Jalankan `php artisan storage:link`.
+
+**Sudah ubah `.env` tapi tidak berubah**
+→ Bersihkan cache: `php artisan optimize:clear`.
+
+**Tab filter / animasi terasa aneh setelah edit**
+→ Build ulang asset: `npm run build`, lalu hard refresh browser (`Ctrl+Shift+R`).
 
 ---
 
-## 🚀 Deployment (Produksi)
+## 🤝 Alur Kerja Tim (Git)
 
-> ⚠️ **PENTING:** Setiap `push` ke branch **`main`** akan **otomatis men-deploy ke server produksi** (GitHub Actions → HestiaCP). Jadi jangan push langsung ke `main` kecuali memang siap rilis — pakai branch + Pull Request.
+1. **Jangan ngoding langsung di `main`.** `main` otomatis ter-deploy ke server (lihat bawah).
+2. Buat branch per fitur: `git checkout -b fitur-katalog`.
+3. `git pull origin main` dulu sebelum mulai & sebelum push, biar tidak bentrok.
+4. Commit dengan pesan jelas: `git commit -m "feat: tambah filter kategori produk"`.
+5. Push branch & buka **Pull Request** ke `main` untuk di-review.
+
+---
+
+## 🌐 Deployment (Produksi)
+
+> ⚠️ **Setiap `push`/merge ke branch `main` otomatis men-deploy ke server produksi.** Jangan push ke `main` kecuali memang siap rilis — selalu lewat branch + Pull Request.
 
 - **URL Produksi:** https://kelas-b-5.informatika-unjedir.web.id
-- **Server:** HestiaCP (PHP 8.3, MySQL), deploy via `.github/workflows/deploy.yml`
-- Kredensial server & database disimpan di **GitHub Secrets** (tidak ada di repo).
-- Build `vendor/` dilakukan di CI (PHP 8.3) lalu di-upload — server tidak menjalankan `composer install`.
+- **Cara kerja:** GitHub Actions ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) meng-install dependency, menjalankan `npm run build`, lalu mengunggah ke server **HestiaCP** lewat SSH/SCP dan menjalankan `migrate --force` + seeding (sekali, kalau DB kosong) + `storage:link`.
+- **Database produksi:** MySQL (server tidak punya driver SQLite).
+- **Kredensial server & database** disimpan di **GitHub Secrets**, tidak ada di dalam repo.
 
 ---
-*Dibuat dengan ❤️ untuk kemajuan Pertanian Presisi di Indonesia.*
+
+*Kopikita — ngopi santai, setiap hari.* ☕

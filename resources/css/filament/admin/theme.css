@@ -3,35 +3,52 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
-/* Premium Light Theme Overrides */
+/* ===== Tema admin Kopikita (krem + cokelat kopi) ===== */
 .fi-body {
-    @apply bg-[#faf8ff] text-[#131b2e];
+    @apply bg-[#faf6f0] text-[#2a1e16];
 }
 
-/* Glassmorphism Cards for Light Theme */
+/* Kartu dengan sentuhan glass lembut */
 .fi-wi-stats-overview-stat,
 .fi-ta-record,
 .fi-fo-card,
 .fi-section {
-    @apply bg-white/80 backdrop-blur-[12px] border border-[rgba(80,200,120,0.15)] rounded-xl shadow-[0_4px_20px_rgba(80,200,120,0.05)] transition-all duration-300;
+    @apply bg-white/85 backdrop-blur-[12px] border border-[rgba(111,78,55,0.15)] rounded-xl shadow-[0_4px_20px_rgba(111,78,55,0.05)] transition-all duration-300;
 }
 
 .fi-wi-stats-overview-stat:hover,
 .fi-ta-record:hover,
 .fi-fo-card:hover,
 .fi-section:hover {
-    @apply shadow-[0_8px_30px_rgba(80,200,120,0.1)];
+    @apply shadow-[0_8px_30px_rgba(111,78,55,0.12)];
 }
 
-/* Glowing Primary Buttons */
+/* Tombol primary */
 .fi-btn-color-primary {
-    @apply transition-all duration-300 shadow-[0_4px_10px_rgba(80,200,120,0.2)];
+    @apply transition-all duration-300 shadow-[0_4px_10px_rgba(111,78,55,0.2)];
 }
 .fi-btn-color-primary:hover {
-    @apply shadow-[0_6px_15px_rgba(80,200,120,0.4)];
+    @apply shadow-[0_6px_15px_rgba(111,78,55,0.4)];
 }
 
-/* Sidebar Light */
+/* Sidebar */
 .fi-sidebar {
-    @apply bg-white/90 backdrop-blur-md border-r border-[rgba(80,200,120,0.15)];
+    @apply bg-white/90 backdrop-blur-md border-r border-[rgba(111,78,55,0.15)];
+}
+
+/* ===== Halaman Login — branded Kopikita ===== */
+.fi-simple-layout {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(111, 78, 55, 0.20), transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(156, 107, 74, 0.16), transparent 42%),
+        linear-gradient(135deg, #f5ede4 0%, #faf6f0 100%);
+}
+
+.fi-simple-main {
+    @apply bg-white/85 backdrop-blur-2xl border border-[rgba(111,78,55,0.22)] shadow-[0_24px_60px_rgba(111,78,55,0.18)] rounded-2xl;
+}
+
+/* Pusatkan logo brand di kartu login */
+.fi-simple-main .fi-logo {
+    @apply mx-auto;
 }
