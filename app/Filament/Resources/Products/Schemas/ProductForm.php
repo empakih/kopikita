@@ -27,11 +27,12 @@ class ProductForm
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->image()
+                    ->maxSize(2048)
                     ->disk('public')
                     ->directory('products'),
                 TextInput::make('category'),
                 Toggle::make('is_bestseller')
-                    ->required(),
+                    ->default(false),
             ]);
     }
 }

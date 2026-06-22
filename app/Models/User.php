@@ -19,12 +19,10 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Tentukan siapa yang boleh mengakses panel admin Filament.
-     */
+    // Hanya akun admin yang boleh masuk panel /admin.
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->email === 'admin@kopikita.id';
     }
 
     /**

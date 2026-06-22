@@ -9,8 +9,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Halaman utama hanya butuh 2 data: menu terbaru & artikel terbaru.
-        $products = Product::latest()->take(3)->get();
+        // Beranda: produk unggulan (bestseller dulu) + artikel terbaru.
+        $products = Product::orderByDesc('is_bestseller')->latest()->take(3)->get();
         $articles = Article::latest('published_at')->take(3)->get();
 
         return view('home', compact('products', 'articles'));

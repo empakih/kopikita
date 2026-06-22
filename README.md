@@ -275,7 +275,7 @@ lalu jalankan lagi `php artisan migrate --seed`.
 
 ## 🤝 Alur Kerja Tim (Git)
 
-1. **Jangan ngoding langsung di `main`.** `main` otomatis ter-deploy ke server (lihat bawah).
+1. **Jangan ngoding langsung di `main`.** `main` dipakai sebagai sumber rilis ke server (lihat bagian Deployment).
 2. Buat branch per fitur: `git checkout -b fitur-katalog`.
 3. `git pull origin main` dulu sebelum mulai & sebelum push, biar tidak bentrok.
 4. Commit dengan pesan jelas: `git commit -m "feat: tambah filter kategori produk"`.
@@ -285,12 +285,28 @@ lalu jalankan lagi `php artisan migrate --seed`.
 
 ## 🌐 Deployment (Produksi)
 
-> ⚠️ **Setiap `push`/merge ke branch `main` otomatis men-deploy ke server produksi.** Jangan push ke `main` kecuali memang siap rilis — selalu lewat branch + Pull Request.
+Deploy dilakukan **manual lewat SSH** ke server **HestiaCP**. Database produksi memakai **MySQL** (server tidak punya driver SQLite).
 
-- **URL Produksi:** https://kelas-b-5.informatika-unjedir.web.id
-- **Cara kerja:** GitHub Actions ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) meng-install dependency, menjalankan `npm run build`, lalu mengunggah ke server **HestiaCP** lewat SSH/SCP dan menjalankan `migrate --force` + seeding (sekali, kalau DB kosong) + `storage:link`.
-- **Database produksi:** MySQL (server tidak punya driver SQLite).
-- **Kredensial server & database** disimpan di **GitHub Secrets**, tidak ada di dalam repo.
+Langkah ringkas (jalankan di server setelah `git pull` / upload kode):
+
+```bash
+composer install --no-dev --optimize-autoloader
+npm install && npm run build
+
+cp .env.example .env          # sekali saja, lalu isi nilai produksi
+php artisan key:generate      # kalau APP_KEY masih kosong
+
+# .env produksi (edit manual): APP_ENV=production, APP_DEBUG=false,
+# APP_URL=https://domain-kamu, DB_CONNECTION=mysql + kredensial DB,
+# SESSION_SECURE_COOKIE=true
+
+php artisan migrate --force   # tambah --seed hanya saat DB masih kosong
+php artisan storage:link
+php artisan optimize:clear
+```
+
+- **Kredensial server & database** diisi langsung di file `.env` server — **tidak pernah di-commit** (lihat `.gitignore`).
+- Setelah produksi, ganti password admin lewat `php artisan tinker` bila perlu.
 
 ---
 

@@ -16,7 +16,9 @@ class ArticleForm
             ->components([
                 TextInput::make('title')
                     ->required(),
-                TextInput::make('slug'),
+                TextInput::make('slug')
+                    ->unique(ignoreRecord: true)
+                    ->helperText('Kosongkan untuk dibuat otomatis dari judul.'),
                 RichEditor::make('content')
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('articles/content')
@@ -24,6 +26,7 @@ class ArticleForm
                     ->columnSpanFull(),
                 FileUpload::make('thumbnail')
                     ->image()
+                    ->maxSize(2048)
                     ->disk('public')
                     ->directory('articles'),
                 TextInput::make('category'),

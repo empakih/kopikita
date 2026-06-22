@@ -35,7 +35,7 @@
 </div>
 <div class="py-md border-y border-outline-variant/30">
 <div class="flex items-baseline gap-xs">
-<span class="font-headline-md text-headline-md text-primary">{{ $product->price_label ?? 'Rp ' . number_format($product->price, 0, ',', '.') }}</span>
+<span class="font-headline-md text-headline-md text-primary">{{ $product->formatted_price }}</span>
 </div>
 </div>
 <div class="product-content text-on-surface-variant font-body-md text-body-md">

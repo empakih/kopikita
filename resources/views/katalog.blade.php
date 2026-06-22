@@ -28,7 +28,7 @@
 </section>
 <!-- Category Filter (client-side, tanpa reload) -->
 <section class="max-w-container-max mx-auto px-gutter mb-lg reveal-on-scroll" data-delay="200">
-    <div class="flex flex-wrap gap-xs items-center border-b border-outline-variant/30 pb-base" id="product-filters">
+    <div class="flex flex-wrap gap-xs items-center border-b border-outline-variant/30 pb-base" id="product-filters" data-filter-items="#product-grid .product-item" data-filter-empty="#empty-filter">
         <button type="button" data-category="Semua" class="filter-btn active cursor-pointer px-md py-sm font-label-lg text-label-lg transition-colors text-primary border-b-2 border-primary">Semua</button>
         @foreach($categories as $cat)
         <button type="button" data-category="{{ $cat }}" class="filter-btn cursor-pointer px-md py-sm font-label-lg text-label-lg transition-colors text-on-surface-variant hover:text-primary">{{ $cat }}</button>
@@ -61,7 +61,7 @@
                 {{ $product->description }}
             </p>
             <div class="flex justify-between items-center mt-auto">
-                <span class="font-label-lg text-label-lg text-primary">{{ $product->price_label ?? 'Rp ' . number_format($product->price, 0, ',', '.') }}</span>
+                <span class="font-label-lg text-label-lg text-primary">{{ $product->formatted_price }}</span>
                 <a class="bg-primary-container text-on-primary-container px-sm py-2 rounded-lg font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-colors" href="{{ route('product-detail', $product->id) }}">Lihat Detail</a>
             </div>
         </div>
@@ -97,43 +97,4 @@
     </div>
 </section>
 </main>
-
-    @push('scripts')
-        <script>
-        // Filter kategori produk di browser (tanpa reload). Pola turbo:load supaya tetap
-        // jalan setelah pindah halaman lewat Turbo. Didaftarkan sekali (anti listener dobel).
-        if (!window.__katalogInit) {
-            window.__katalogInit = true;
-            const bindProductFilter = () => {
-                const buttons = document.querySelectorAll('#product-filters .filter-btn');
-                if (!buttons.length) return; // bukan halaman katalog
-                const items = document.querySelectorAll('#product-grid .product-item');
-                const emptyMsg = document.getElementById('empty-filter');
-
-                buttons.forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        buttons.forEach(b => {
-                            b.classList.remove('text-primary', 'border-b-2', 'border-primary', 'active');
-                            b.classList.add('text-on-surface-variant');
-                        });
-                        btn.classList.remove('text-on-surface-variant');
-                        btn.classList.add('text-primary', 'border-b-2', 'border-primary', 'active');
-
-                        const cat = btn.dataset.category;
-                        let shown = 0;
-                        items.forEach(item => {
-                            const match = (cat === 'Semua' || item.dataset.category === cat);
-                            item.style.display = match ? '' : 'none';
-                            // Pastikan kartu yang tampil langsung terlihat (kalau belum sempat ter-reveal saat scroll).
-                            if (match) { item.classList.add('is-revealed'); shown++; }
-                        });
-                        emptyMsg.classList.toggle('hidden', shown > 0);
-                    });
-                });
-            };
-            document.addEventListener('turbo:load', bindProductFilter);
-            document.addEventListener('DOMContentLoaded', () => { if (!window.Turbo) bindProductFilter(); });
-        }
-        </script>
-    @endpush
 </x-layout>

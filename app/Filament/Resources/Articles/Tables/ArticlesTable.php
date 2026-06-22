@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Articles\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,23 +15,21 @@ class ArticlesTable
     {
         return $table
             ->columns([
+                ImageColumn::make('thumbnail')
+                    ->disk('public'),
                 TextColumn::make('title')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('thumbnail')
                     ->searchable(),
                 TextColumn::make('category')
                     ->searchable(),
                 TextColumn::make('author')
                     ->searchable(),
-                TextColumn::make('meta_title')
-                    ->searchable(),
-                TextColumn::make('meta_description')
-                    ->searchable(),
                 TextColumn::make('published_at')
                     ->date()
                     ->sortable(),
+                TextColumn::make('meta_title')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('meta_description')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -39,9 +38,6 @@ class ArticlesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
             ])
             ->recordActions([
                 EditAction::make(),

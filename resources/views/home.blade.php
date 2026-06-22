@@ -38,7 +38,7 @@
                         <h3 class="font-headline-md text-headline-md text-on-surface mb-xs">{{ $product->name }}</h3>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-grow text-justify">{{ $product->description }}</p>
                         <div class="flex justify-between items-center mt-auto">
-                            <span class="font-label-lg text-label-lg text-primary">{{ $product->price_label ?? 'Rp ' . number_format($product->price, 0, ',', '.') }}</span>
+                            <span class="font-label-lg text-label-lg text-primary">{{ $product->formatted_price }}</span>
                             <a class="bg-primary-container text-on-primary-container px-sm py-2 rounded-lg font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-colors" href="{{ route('product-detail', $product->id) }}">Lihat Detail</a>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                         <div class="text-outline font-label-sm text-label-sm mb-xs">{{ \Carbon\Carbon::parse($article->published_at ?? $article->created_at)->translatedFormat('d M Y') }}</div>
                         <h3 class="font-headline-md text-headline-md text-on-surface mb-sm line-clamp-2">{{ $article->title }}</h3>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-grow line-clamp-2">{{ strip_tags($article->content) }}</p>
-                        <a class="inline-flex items-center gap-1 text-primary font-label-lg text-label-lg hover:text-primary-container transition-colors mt-auto" href="{{ route('artikel.detail', $article->slug ?? 'contoh') }}">
+                        <a class="inline-flex items-center gap-1 text-primary font-label-lg text-label-lg hover:text-primary-container transition-colors mt-auto" href="{{ route('artikel.detail', $article->slug) }}">
                             Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </a>
                     </div>

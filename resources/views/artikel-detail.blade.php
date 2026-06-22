@@ -1,4 +1,8 @@
-<x-layout title="Artikel | Kopikita">
+<x-layout :title="($article->meta_title ?: $article->title) . ' | Kopikita'">
+    @push('head')
+        <meta name="description" content="{{ $article->meta_description ?: Str::limit(strip_tags($article->content), 155) }}"/>
+    @endpush
+    <div id="read-progress" class="fixed top-0 left-0 h-1 bg-primary z-[60] transition-all duration-100 ease-out" style="width:0"></div>
     <main class="pt-20">
 <!-- Hero Section -->
 <header class="w-full bg-surface-container-lowest">
@@ -80,28 +84,16 @@
 
     @push('scripts')
         <script>
-        // Simple progress bar micro-interaction
-        const progressBar = document.createElement('div');
-        progressBar.className = 'fixed top-0 left-0 h-1 bg-primary z-[60] transition-all duration-100 ease-out';
-        progressBar.style.width = '0%';
-        document.body.appendChild(progressBar);
-
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            progressBar.style.width = scrolled + '%';
-        });
-
-        // Hover effect for related cards
-        document.querySelectorAll('.group').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-4px)';
+        // Progress bar baca artikel (didaftarkan sekali, aman terhadap navigasi Turbo).
+        if (!window.__articleProgress) {
+            window.__articleProgress = true;
+            window.addEventListener('scroll', () => {
+                const bar = document.getElementById('read-progress');
+                if (!bar) return;
+                const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
             });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-            });
-        });
-    </script>
+        }
+        </script>
     @endpush
 </x-layout>

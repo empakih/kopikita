@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>{{ $title ?? 'Kopikita — Kopi Susu & Manual Brew' }}</title>
+    @stack('head')
 
     {{-- Turbo: jangan tampilkan versi cache dulu (hindari "kedip refresh 2x") --}}
     <meta name="turbo-cache-control" content="no-preview"/>
