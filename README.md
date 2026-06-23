@@ -19,6 +19,7 @@ Dibangun dengan **Laravel + Filament**. Proyek kuliah **Pemweb II (CPMK4)**, sen
 9. [Troubleshooting (kalau error)](#-troubleshooting-kalau-error)
 10. [Alur Kerja Tim (Git)](#-alur-kerja-tim-git)
 11. [Deployment (Produksi)](#-deployment-produksi)
+12. [Pembagian Tugas KopiKita (4 Orang)](#-pembagian-tugas-kopikita-4-orang)
 
 ---
 
@@ -311,3 +312,83 @@ php artisan optimize:clear
 ---
 
 *Kopikita — ngopi santai, setiap hari.* ☕
+
+---
+
+## 👥 Pembagian Tugas KopiKita (4 Orang)
+
+### 🧑‍💻 Orang 1 — Routing, Controller & Deployment
+**Peran:** "Alur request & cara aplikasi jalan/online"
+
+**File yang dipegang:**
+- [routes/web.php](routes/web.php) · [routes/console.php](routes/console.php)
+- [app/Http/Controllers/HomeController.php](app/Http/Controllers/HomeController.php) · [ProductController.php](app/Http/Controllers/ProductController.php) · [ArticleController.php](app/Http/Controllers/ArticleController.php) · [Controller.php](app/Http/Controllers/Controller.php)
+- [composer.json](composer.json) · [.env.example](.env.example) · [vite.config.js](vite.config.js) + **proses deployment** (VPS Hestia, SSL)
+
+**Yang dijelasin:**
+- Cara kerja routing: URL → controller → `view()` + data lewat `compact()`
+- `Route::get('/katalog/{id}', [ProductController::class,'show'])->whereNumber('id')` — kenapa pakai controller (bukan closure) & `whereNumber`
+- Alur deploy: SSH ke server → `git clone` → `composer install` → `migrate --seed` → `npm run build` → SSL Let's Encrypt
+- Kenapa `APP_ENV=production` & `APP_DEBUG=false` di server
+
+**Mungkin ditanya dosen:** *"Bedanya route closure vs controller?"* · *"Gimana data sampai ke Blade?"* · *"Ceritain proses deploy ke server."*
+
+---
+
+### 🧑‍💻 Orang 2 — Database: Model, Migration & Seeder
+**Peran:** "Struktur data & Eloquent"
+
+**File yang dipegang:**
+- [app/Models/Product.php](app/Models/Product.php) · [Article.php](app/Models/Article.php) · [User.php](app/Models/User.php)
+- Semua [database/migrations/](database/migrations/) (users, cache, jobs, products, articles)
+- [database/seeders/DatabaseSeeder.php](database/seeders/DatabaseSeeder.php) · [database/factories/UserFactory.php](database/factories/UserFactory.php)
+
+**Yang dijelasin (banyak bagian keren di sini):**
+- `$fillable` (kolom mass-assignment) & `$casts` (`is_bestseller`→boolean, `price`→decimal, `published_at`→date)
+- **Auto-slug**: method `booted()` + `saving()` di Article — slug otomatis dari judul kalau kosong
+- **Accessor** `formatted_price` di Product — format "Rp" sekali di model
+- Bedanya **migration** (struktur tabel) vs **seeder** (isi data contoh + akun admin via `firstOrCreate`)
+
+**Mungkin ditanya:** *"Apa itu `$fillable`/`$casts`?"* · *"Slug-nya gimana kalau admin nggak isi?"* · *"Migration itu apa?"*
+
+---
+
+### 🧑‍💻 Orang 3 — Admin Panel (Filament CRUD)
+**Peran:** "Dashboard admin / CMS"
+
+**File yang dipegang:**
+- [app/Providers/Filament/AdminPanelProvider.php](app/Providers/Filament/AdminPanelProvider.php) (config panel, branding, warna, middleware)
+- **Products:** [ProductResource.php](app/Filament/Resources/Products/ProductResource.php) · [ProductForm.php](app/Filament/Resources/Products/Schemas/ProductForm.php) · [ProductsTable.php](app/Filament/Resources/Products/Tables/ProductsTable.php) · folder Pages
+- **Articles:** [ArticleResource.php](app/Filament/Resources/Articles/ArticleResource.php) · [ArticleForm.php](app/Filament/Resources/Articles/Schemas/ArticleForm.php) · [ArticlesTable.php](app/Filament/Resources/Articles/Tables/ArticlesTable.php) · folder Pages
+- [app/Filament/Widgets/DashboardStats.php](app/Filament/Widgets/DashboardStats.php)
+
+**Yang dijelasin:**
+- Konsep Filament: 1 Resource = Form (input) + Table (daftar) + Pages (List/Create/Edit)
+- Field form: `TextInput`, `RichEditor` (artikel), `FileUpload->image()->maxSize(2048)`, `Toggle('is_bestseller')`
+- Dashboard: 3 statistik (`Product::count()`, `where('is_bestseller')`, `Article::count()`)
+- Akses admin dibatasi `canAccessPanel()` (di model User — koordinasi sama Orang 2)
+
+**Mungkin ditanya:** *"Filament itu apa?"* · *"Upload gambar disimpan di mana?"* · *"Angka dashboard dari mana?"* · *"Siapa yang bisa masuk /admin?"*
+
+---
+
+### 🧑‍💻 Orang 4 — Frontend: Blade, Tailwind & Turbo
+**Peran:** "Tampilan & interaksi website publik"
+
+**File yang dipegang:**
+- [resources/views/components/layout.blade.php](resources/views/components/layout.blade.php) (navbar, footer, kerangka)
+- [home.blade.php](resources/views/home.blade.php) · [katalog.blade.php](resources/views/katalog.blade.php) · [product-detail.blade.php](resources/views/product-detail.blade.php)
+- [artikel.blade.php](resources/views/artikel.blade.php) · [artikel-detail.blade.php](resources/views/artikel-detail.blade.php) · [faq.blade.php](resources/views/faq.blade.php) · [konsultasi.blade.php](resources/views/konsultasi.blade.php)
+- [resources/js/app.js](resources/js/app.js) · [resources/css/](resources/css/) (Tailwind + tema)
+
+**Yang dijelasin:**
+- Komponen `<x-layout>` — kerangka dipakai ulang semua halaman
+- `@forelse` (loop produk/artikel + fallback kalau kosong), `{{ }}` vs `{!! !!}`
+- **Filter kategori instan** di [app.js](resources/js/app.js) — sembunyiin kartu pakai `data-category` **tanpa reload**
+- **Turbo** (`@hotwired/turbo`) — pindah halaman terasa instan (ala SPA)
+- Gambar: `asset('storage/...')` + gambar default; styling Tailwind
+
+**Mungkin ditanya:** *"`<x-layout>` itu apa?"* · *"Filter kategori jalan gimana?"* · *"Turbo itu apa?"* · *"Bedanya `{{ }}` sama `{!! !!}`?"*
+
+---
+
