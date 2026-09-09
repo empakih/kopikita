@@ -1,5 +1,12 @@
 <?php
 
+// Ensure valid timezone in serverless runtime
+if (empty($_ENV['APP_TIMEZONE']) || $_ENV['APP_TIMEZONE'] === '') {
+    $_ENV['APP_TIMEZONE'] = 'Asia/Jakarta';
+    putenv('APP_TIMEZONE=Asia/Jakarta');
+}
+date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'Asia/Jakarta');
+
 // Ensure /tmp writable directories exist for serverless environments (Vercel)
 $tmpDirs = [
     '/tmp/views',
