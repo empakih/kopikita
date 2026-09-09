@@ -28,7 +28,7 @@
   "outputDirectory": "public",
   "env": {
     "APP_ENV": "production",
-    "APP_DEBUG": "false",
+    "APP_DEBUG": "true",
     "APP_KEY": "base64:iVYJIXXFcjH8PsOqd7cUjrdgHuqW9O42+t2/wfP2uTk=",
     "APP_TIMEZONE": "Asia/Jakarta",
     "APP_CONFIG_CACHE": "/tmp/config.php",
