@@ -58,7 +58,7 @@ if (file_exists($sqliteDest)) {
     }
 }
 
-// 6. Safe drivers for serverless (cookie session, array cache, stderr logging)
+// 6. Safe drivers for serverless (cookie session, array cache, stderr logging, file maintenance)
 $_ENV['SESSION_DRIVER'] = 'cookie';
 $_SERVER['SESSION_DRIVER'] = 'cookie';
 putenv('SESSION_DRIVER=cookie');
@@ -70,6 +70,14 @@ putenv('CACHE_STORE=array');
 $_ENV['LOG_CHANNEL'] = 'stderr';
 $_SERVER['LOG_CHANNEL'] = 'stderr';
 putenv('LOG_CHANNEL=stderr');
+
+$_ENV['APP_MAINTENANCE_DRIVER'] = 'file';
+$_SERVER['APP_MAINTENANCE_DRIVER'] = 'file';
+putenv('APP_MAINTENANCE_DRIVER=file');
+
+$_ENV['APP_MAINTENANCE_STORE'] = 'cache';
+$_SERVER['APP_MAINTENANCE_STORE'] = 'cache';
+putenv('APP_MAINTENANCE_STORE=cache');
 
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
 $_SERVER['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
