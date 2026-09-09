@@ -22,7 +22,7 @@ class User extends Authenticatable implements FilamentUser
     // Hanya akun admin yang boleh masuk panel /admin.
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->email === 'admin@kopikita.id';
+        return strcasecmp(trim((string)$this->email), 'admin@kopikita.id') === 0;
     }
 
     /**
