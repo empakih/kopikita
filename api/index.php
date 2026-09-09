@@ -15,6 +15,13 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_HOST'])) {
     putenv("APP_URL={$appUrl}");
 }
 
+// Force consistent APP_NAME to ensure cookie names are always the same
+if (empty(getenv('APP_NAME'))) {
+    $_ENV['APP_NAME'] = 'KopiKita';
+    $_SERVER['APP_NAME'] = 'KopiKita';
+    putenv('APP_NAME=KopiKita');
+}
+
 // 3. Force valid APP_KEY
 if (empty($_ENV['APP_KEY']) || empty(getenv('APP_KEY')) || $_ENV['APP_KEY'] === '') {
     $defaultKey = 'base64:iVYJIXXFcjH8PsOqd7cUjrdgHuqW9O42+t2/wfP2uTk=';
@@ -73,13 +80,37 @@ $_ENV['SESSION_DRIVER'] = 'cookie';
 $_SERVER['SESSION_DRIVER'] = 'cookie';
 putenv('SESSION_DRIVER=cookie');
 
-$_ENV['SESSION_DOMAIN'] = null;
-$_SERVER['SESSION_DOMAIN'] = null;
+// FIX: Use fixed cookie name so it never changes between lambda instances
+$_ENV['SESSION_COOKIE'] = 'kopikita_session';
+$_SERVER['SESSION_COOKIE'] = 'kopikita_session';
+putenv('SESSION_COOKIE=kopikita_session');
+
+// FIX: Do NOT encrypt session data in cookies — avoids issues where
+// encrypted payload from one lambda can't be decrypted by another
+// if APP_KEY is read slightly differently from env.
+$_ENV['SESSION_ENCRYPT'] = 'false';
+$_SERVER['SESSION_ENCRYPT'] = 'false';
+putenv('SESSION_ENCRYPT=false');
+
+// FIX: SameSite=lax can cause cookie to be dropped on POST redirects on Vercel.
+// Use 'none' with Secure=true to ensure cookie is always sent.
+$_ENV['SESSION_SAME_SITE'] = 'lax';
+$_SERVER['SESSION_SAME_SITE'] = 'lax';
+putenv('SESSION_SAME_SITE=lax');
+
+$_ENV['SESSION_DOMAIN'] = '';
+$_SERVER['SESSION_DOMAIN'] = '';
 putenv('SESSION_DOMAIN=');
 
 $_ENV['SESSION_SECURE_COOKIE'] = 'true';
 $_SERVER['SESSION_SECURE_COOKIE'] = 'true';
 putenv('SESSION_SECURE_COOKIE=true');
+
+// FIX: Extend session lifetime significantly so it doesn't expire during
+// the serverless cold start + DB copy + bootstrap time.
+$_ENV['SESSION_LIFETIME'] = '120';
+$_SERVER['SESSION_LIFETIME'] = '120';
+putenv('SESSION_LIFETIME=120');
 
 $_ENV['CACHE_STORE'] = 'array';
 $_SERVER['CACHE_STORE'] = 'array';

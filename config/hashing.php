@@ -40,6 +40,9 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'rehash_on_login' => true,
+    // VERCEL FIX: rehash_on_login disabled — SQLite in /tmp is ephemeral per lambda.
+    // If enabled, Laravel UPDATEs the password hash, but the next lambda instance
+    // gets a fresh SQLite copy from the repo, causing an infinite login redirect loop.
+    'rehash_on_login' => false,
 
 ];
