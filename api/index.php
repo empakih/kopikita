@@ -5,7 +5,17 @@ $_ENV['VERCEL'] = '1';
 $_SERVER['VERCEL'] = '1';
 putenv('VERCEL=1');
 
-// 2. Force valid APP_KEY
+// 2. Auto-detect live APP_URL from Vercel headers
+if (!empty($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+    $proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';
+    $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+    $appUrl = "{$proto}://{$host}";
+    $_ENV['APP_URL'] = $appUrl;
+    $_SERVER['APP_URL'] = $appUrl;
+    putenv("APP_URL={$appUrl}");
+}
+
+// 3. Force valid APP_KEY
 if (empty($_ENV['APP_KEY']) || empty(getenv('APP_KEY')) || $_ENV['APP_KEY'] === '') {
     $defaultKey = 'base64:iVYJIXXFcjH8PsOqd7cUjrdgHuqW9O42+t2/wfP2uTk=';
     $_ENV['APP_KEY'] = $defaultKey;
@@ -13,7 +23,7 @@ if (empty($_ENV['APP_KEY']) || empty(getenv('APP_KEY')) || $_ENV['APP_KEY'] === 
     putenv("APP_KEY={$defaultKey}");
 }
 
-// 3. Force valid Timezone
+// 4. Force valid Timezone
 if (empty($_ENV['APP_TIMEZONE']) || empty(getenv('APP_TIMEZONE')) || $_ENV['APP_TIMEZONE'] === '') {
     $_ENV['APP_TIMEZONE'] = 'Asia/Jakarta';
     $_SERVER['APP_TIMEZONE'] = 'Asia/Jakarta';
@@ -21,7 +31,7 @@ if (empty($_ENV['APP_TIMEZONE']) || empty(getenv('APP_TIMEZONE')) || $_ENV['APP_
 }
 date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'Asia/Jakarta');
 
-// 4. Create all needed writable /tmp storage directories
+// 5. Create all needed writable /tmp storage directories
 $storageDirs = [
     '/tmp/storage',
     '/tmp/storage/framework',
@@ -40,7 +50,7 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// 5. Ensure SQLite database is present and writable in /tmp
+// 6. Ensure SQLite database is present and writable in /tmp
 $sqliteSource = __DIR__ . '/../database/database.sqlite';
 $sqliteDest = '/tmp/database.sqlite';
 if (!file_exists($sqliteDest) && file_exists($sqliteSource)) {
@@ -58,10 +68,18 @@ if (file_exists($sqliteDest)) {
     }
 }
 
-// 6. Safe drivers for serverless
-$_ENV['SESSION_DRIVER'] = 'cookie';
-$_SERVER['SESSION_DRIVER'] = 'cookie';
-putenv('SESSION_DRIVER=cookie');
+// 7. Safe drivers for serverless (file session, array cache, stderr logging)
+$_ENV['SESSION_DRIVER'] = 'file';
+$_SERVER['SESSION_DRIVER'] = 'file';
+putenv('SESSION_DRIVER=file');
+
+$_ENV['SESSION_DOMAIN'] = null;
+$_SERVER['SESSION_DOMAIN'] = null;
+putenv('SESSION_DOMAIN=');
+
+$_ENV['SESSION_SECURE_COOKIE'] = 'true';
+$_SERVER['SESSION_SECURE_COOKIE'] = 'true';
+putenv('SESSION_SECURE_COOKIE=true');
 
 $_ENV['CACHE_STORE'] = 'array';
 $_SERVER['CACHE_STORE'] = 'array';

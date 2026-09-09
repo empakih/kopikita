@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER') ?: (isset($_ENV['VERCEL']) || getenv('VERCEL') ? 'cookie' : 'database'),
+    'driver' => env('SESSION_DRIVER') ?: 'file',
 
     /*
     |--------------------------------------------------------------------------
@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    'domain' => env('SESSION_DOMAIN') && env('SESSION_DOMAIN') !== 'null' ? env('SESSION_DOMAIN') : null,
 
     /*
     |--------------------------------------------------------------------------
@@ -169,7 +169,9 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE') !== null && env('SESSION_SECURE_COOKIE') !== '' && env('SESSION_SECURE_COOKIE') !== 'false'
+        ? (bool) env('SESSION_SECURE_COOKIE')
+        : (isset($_SERVER['HTTPS']) || isset($_ENV['VERCEL']) || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])),
 
     /*
     |--------------------------------------------------------------------------
