@@ -60,7 +60,9 @@ return [
     |
     */
 
-    'files' => storage_path('framework/sessions'),
+    'files' => isset($_ENV['VERCEL']) || getenv('VERCEL')
+        ? '/tmp/storage/framework/sessions'
+        : storage_path('framework/sessions'),
 
     /*
     |--------------------------------------------------------------------------

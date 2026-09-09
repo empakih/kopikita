@@ -75,25 +75,19 @@ if (file_exists($sqliteDest)) {
     }
 }
 
-// 7. Safe drivers for serverless (cookie session, array cache, stderr logging)
-$_ENV['SESSION_DRIVER'] = 'cookie';
-$_SERVER['SESSION_DRIVER'] = 'cookie';
-putenv('SESSION_DRIVER=cookie');
+// 7. Safe drivers for serverless
+// IMPORTANT: Do NOT use 'cookie' driver — Filament stores too much session data,
+// causing Vercel 494 REQUEST_HEADER_TOO_LARGE (cookie headers exceed 8KB limit).
+// Use 'file' driver storing sessions in /tmp (shared within the same warm lambda).
+$_ENV['SESSION_DRIVER'] = 'file';
+$_SERVER['SESSION_DRIVER'] = 'file';
+putenv('SESSION_DRIVER=file');
 
-// FIX: Use fixed cookie name so it never changes between lambda instances
+// Use fixed cookie name for CSRF token — never derived from APP_NAME
 $_ENV['SESSION_COOKIE'] = 'kopikita_session';
 $_SERVER['SESSION_COOKIE'] = 'kopikita_session';
 putenv('SESSION_COOKIE=kopikita_session');
 
-// FIX: Do NOT encrypt session data in cookies — avoids issues where
-// encrypted payload from one lambda can't be decrypted by another
-// if APP_KEY is read slightly differently from env.
-$_ENV['SESSION_ENCRYPT'] = 'false';
-$_SERVER['SESSION_ENCRYPT'] = 'false';
-putenv('SESSION_ENCRYPT=false');
-
-// FIX: SameSite=lax can cause cookie to be dropped on POST redirects on Vercel.
-// Use 'none' with Secure=true to ensure cookie is always sent.
 $_ENV['SESSION_SAME_SITE'] = 'lax';
 $_SERVER['SESSION_SAME_SITE'] = 'lax';
 putenv('SESSION_SAME_SITE=lax');
@@ -106,8 +100,6 @@ $_ENV['SESSION_SECURE_COOKIE'] = 'true';
 $_SERVER['SESSION_SECURE_COOKIE'] = 'true';
 putenv('SESSION_SECURE_COOKIE=true');
 
-// FIX: Extend session lifetime significantly so it doesn't expire during
-// the serverless cold start + DB copy + bootstrap time.
 $_ENV['SESSION_LIFETIME'] = '120';
 $_SERVER['SESSION_LIFETIME'] = '120';
 putenv('SESSION_LIFETIME=120');
