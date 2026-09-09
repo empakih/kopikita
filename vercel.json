@@ -43,6 +43,8 @@
     "DB_CONNECTION": "sqlite",
     "DB_DATABASE": "/tmp/database.sqlite",
     "APP_MAINTENANCE_DRIVER": "file",
-    "APP_MAINTENANCE_STORE": "cache"
+    "APP_MAINTENANCE_STORE": "cache",
+    "BCRYPT_ROUNDS": "12",
+    "HASH_DRIVER": "bcrypt"
   }
 }
